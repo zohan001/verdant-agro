@@ -10,6 +10,7 @@
  */
 
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
@@ -73,6 +74,14 @@ function createApp() {
 
     // Serve static frontend files from public directory
     app.use(express.static('public'));
+
+    // Legal pages (serve the static HTML at clean /privacy and /terms URLs)
+    app.get('/privacy', (req, res) => {
+        res.sendFile(path.join(__dirname, '..', 'public', 'privacy.html'));
+    });
+    app.get('/terms', (req, res) => {
+        res.sendFile(path.join(__dirname, '..', 'public', 'terms.html'));
+    });
 
     // ==============================
     // API Routes
