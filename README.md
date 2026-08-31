@@ -143,17 +143,32 @@ docker run -p 3000:3000 -e MONGO_URI=mongodb://host.docker.internal:27017/verdan
 
 ## ☁️ Production Deployment on Render
 
-This project includes a `render.yaml` **Blueprint** that provisions both a
-managed MongoDB database and the web service automatically.
+The app uses **MongoDB**, which Render does not provide as a managed database
+service. So the database is hosted externally (e.g., **MongoDB Atlas** free
+tier) and the connection string (`MONGO_URI`) is provided to the Render web
+service as a secret during setup. The included `render.yaml` Blueprint wires
+this up with `sync: false` so you're prompted for the value.
 
-### Quick Deploy (Blueprint)
+### 1. Create a free MongoDB Atlas database
+
+1. Sign up at [mongodb.com/atlas](https://www.mongodb.com/atlas) (free tier).
+2. Create a **free M0 cluster**.
+3. Under **Database Access**, create a database user with read/write rights.
+4. Under **Network Access**, allow access from anywhere (`0.0.0.0/0`)
+   (or Render's [static IPs](https://render.com/docs/static-outbound-ip-addresses) if on a paid plan).
+5. Click **Connect** → **Drivers** → copy the connection string:
+   `mongodb+srv://<user>:<password>@cluster.mongodb.net/` — append the DB
+   name, e.g. `...mongodb.net/verdant`.
+
+### 2. Quick Deploy (Blueprint)
 
 1. Create a **public GitHub repository** and push this project (see below).
 2. Sign up/log in at [render.com](https://render.com).
 3. From the dashboard, click **New** → **Blueprint**.
 4. Select your GitHub repository.
-5. Review the two resources (`verdant-agro-db` MongoDB and `verdant-agro` web service) and click **Apply**.
-6. Render builds and deploys automatically. The `MONGO_URI` is wired to your database via the blueprint, and the health check runs against `/api/health`.
+5. When prompted, **paste your `MONGO_URI`** (the secret env var).
+6. Review the `verdant-agro` web service and click **Apply**.
+7. Render builds and deploys automatically. The health check runs against `/api/health`.
 
 ### Pushing to GitHub
 
@@ -170,15 +185,16 @@ git push -u origin main
 
 ### Manual Deploy (if you prefer the dashboard)
 
-1. **Database:** In Render, create a **MongoDB** instance.
+1. **Database:** Host MongoDB externally (e.g., MongoDB Atlas — see step 1 above).
 2. **Web Service:** Create a **Web Service**, connect your repo.
    - **Runtime:** Node
    - **Build command:** `npm install`
    - **Start command:** `npm start`
    - **Health check path:** `/api/health`
-   - **Environment variable:** `MONGO_URI` = your MongoDB connection string (from the database service under "External connection string" or internal).
+   - **Environment variable:** `MONGO_URI` = your MongoDB connection string (from Atlas).
 
-> **Note:** The free Render plan may suspend idle services; a paid plan keeps the database online continuously. MongoDB data is fully persistent on Render, unlike an on-disk database.
+> **Note:** The free Render plan may suspend idle web services, but your
+> MongoDB data lives in Atlas and is fully persistent regardless.
 
 ## 🔒 Security Features
 

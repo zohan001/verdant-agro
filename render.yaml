@@ -1,55 +1,50 @@
 # ============================================
 # Render Blueprint - Verdant Agro
 # ============================================
-# Defines the full deployment stack on Render:
-#   - A managed MongoDB database (persistent)
-#   - A web service that connects to it
+# Defines the web service deployment on Render.
+#
+# The app uses MongoDB for persistence. Render does
+# NOT provide a managed MongoDB service, so the
+# connection string points to an external MongoDB
+# (e.g. MongoDB Atlas free tier) provided as a
+# secret during the Blueprint creation flow.
 #
 # Deploy by:
 #   1. Pushing this repo to GitHub
 #   2. In Render Dashboard: New > Blueprint
 #   3. Selecting this repository
+#   4. Pasting your MONGO_URI when prompted
 # ============================================
 
 services:
   # ==============================
-  # MongoDB Database Service
-  # ==============================
-  - type: mongodb
-    name: verdant-agro-db
-    databaseName: verdant
-    # Render auto-generates the internal connection string and
-    # exposes it to connected services via the
-    # INTERNAL_CONNECTION_STRING env var.
-
-  # ==============================
-  # Web Application Service
+  # Web Application (frontend + API)
   # ==============================
   - type: web
     name: verdant-agro
     runtime: node
     plan: free
+    healthCheckPath: /api/health
+
+    # Build and start commands (Node.js runtime)
+    #   Render defaults: Build = npm install, Start = npm start.
+    #   Explicit here for clarity.
+    buildCommand: npm install
+    startCommand: npm start
+
     envVars:
       - key: NODE_ENV
         value: production
+
       # Rate limiting defaults
       - key: RATE_LIMIT_WINDOW
         value: "15"
       - key: RATE_LIMIT_MAX
         value: "100"
-      # Connect to the MongoDB service above.
-      # Render resolves this to the internal connection string
-      # of the mongodb service named 'verdant-agro-db'.
+
+      # MongoDB connection string (secret).
+      # You MUST supply this value when the Blueprint is
+      # first created (it will not be synced afterward).
+      # Example (Atlas): mongodb+srv://<user>:<password>@cluster.mongodb.net/verdant
       - key: MONGO_URI
-        fromDatabase:
-          name: verdant-agro-db
-          property: connectionString
-    # Render automatically detects Node.js and uses:
-    #   Build command:  npm install
-    #   Start command:  npm start
-    # overrides:
-    #   buildCommand: npm install
-    #   startCommand: npm start
-    healthCheckPath: /api/health
-    # Automatically deploy on every push to the repo
-    # (see repo settings / branch configuration)
+        sync: false
