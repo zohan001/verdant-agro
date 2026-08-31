@@ -7,7 +7,9 @@
     "start": "node server/index.js",
     "dev": "nodemon server/index.js",
     "init-db": "node scripts/init-db.js",
-    "test": "node scripts/test-api.js"
+    "test": "node scripts/test-api.js",
+    "build:css": "tailwindcss -i ./css/input.css -o ./public/styles.css --minify",
+    "build": "npm run build:css"
   },
   "keywords": [
     "agriculture",
@@ -29,6 +31,7 @@
     "mongoose": "^9.9.4"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "tailwindcss": "^3.4.19"
   }
 }

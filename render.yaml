@@ -27,9 +27,9 @@ services:
     healthCheckPath: /api/health
 
     # Build and start commands (Node.js runtime)
-    #   Render defaults: Build = npm install, Start = npm start.
-    #   Explicit here for clarity.
-    buildCommand: npm install
+    #   Build compiles the Tailwind CSS into public/styles.css
+    #   Start runs the Express server (frontend + API)
+    buildCommand: npm install && npm run build
     startCommand: npm start
 
     envVars:
