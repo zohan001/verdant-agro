@@ -1,0 +1,55 @@
+# ============================================
+# Render Blueprint - Verdant Agro
+# ============================================
+# Defines the full deployment stack on Render:
+#   - A managed MongoDB database (persistent)
+#   - A web service that connects to it
+#
+# Deploy by:
+#   1. Pushing this repo to GitHub
+#   2. In Render Dashboard: New > Blueprint
+#   3. Selecting this repository
+# ============================================
+
+services:
+  # ==============================
+  # MongoDB Database Service
+  # ==============================
+  - type: mongodb
+    name: verdant-agro-db
+    databaseName: verdant
+    # Render auto-generates the internal connection string and
+    # exposes it to connected services via the
+    # INTERNAL_CONNECTION_STRING env var.
+
+  # ==============================
+  # Web Application Service
+  # ==============================
+  - type: web
+    name: verdant-agro
+    runtime: node
+    plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Rate limiting defaults
+      - key: RATE_LIMIT_WINDOW
+        value: "15"
+      - key: RATE_LIMIT_MAX
+        value: "100"
+      # Connect to the MongoDB service above.
+      # Render resolves this to the internal connection string
+      # of the mongodb service named 'verdant-agro-db'.
+      - key: MONGO_URI
+        fromDatabase:
+          name: verdant-agro-db
+          property: connectionString
+    # Render automatically detects Node.js and uses:
+    #   Build command:  npm install
+    #   Start command:  npm start
+    # overrides:
+    #   buildCommand: npm install
+    #   startCommand: npm start
+    healthCheckPath: /api/health
+    # Automatically deploy on every push to the repo
+    # (see repo settings / branch configuration)
