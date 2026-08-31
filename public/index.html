@@ -14,6 +14,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
 
+    <!-- Enable JS-powered enhancements only when JavaScript is available.
+         This guarantees all page content is visible even if JS fails. -->
+    <script>
+        document.documentElement.classList.add('js');
+    </script>
+
 </head>
 
 <body>
@@ -1161,7 +1167,7 @@
             }
 
             // ==============================
-            // 8. Smooth Scroll for Anchor Links
+            // 8; Smooth Scroll for Anchor Links
             // ==============================
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
@@ -1182,7 +1188,58 @@
                 });
             });
 
+            // ==============================
+            // 9. Fallback Reveal (reliability)
+            // ==============================
+            // In addition to the IntersectionObserver, force-reveal any
+            // remaining sections shortly after load and after a small
+            // scroll so content is never left visually offset/hidden —
+            // even if the observer fails on a particular browser/device.
+            const forceReveal = () => {
+                document.querySelectorAll('.reveal:not(.active)').forEach(el => {
+                    el.classList.add('active');
+                });
+            };
+
+            // Reveal above-the-fold content shortly after load
+            setTimeout(forceReveal, 800);
+
+            // Safety net on first scroll
+            let didScrollReveal = false;
+            window.addEventListener('scroll', () => {
+                if (!didScrollReveal) {
+                    didScrollReveal = true;
+                    setTimeout(forceReveal, 100);
+                }
+            }, { passive: true, once: true });
+
         }); // End DOMContentLoaded
+    </script>
+
+    <!-- ==============================
+         Standalone Reveal Safety Net
+         ==============================
+         Decoupled from the main script: guarantees every .reveal element
+         becomes fully visible and un-offset shortly after load, even if
+         the main script or IntersectionObserver fails for any reason.
+         This prevents any section from ever appearing blank.
+         ============================== -->
+    <script>
+        (function () {
+            function revealAll() {
+                var els = document.querySelectorAll('.reveal:not(.active)');
+                for (var i = 0; i < els.length; i++) {
+                    els[i].classList.add('active');
+                }
+            }
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function () {
+                    setTimeout(revealAll, 900);
+                });
+            } else {
+                setTimeout(revealAll, 900);
+            }
+        })();
     </script>
 </body>
 </html>

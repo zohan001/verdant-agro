@@ -136,13 +136,25 @@ body {
 .delay-500 { animation-delay: 0.5s; }
 .delay-600 { animation-delay: 0.6s; }
 
-/* Initially hidden for animation */
+/* Scroll reveal enhancement (progressive enhancement only).
+   Content is ALWAYS visible by default, so the page never appears blank
+   even if JavaScript fails to load or run.
+   The `.js` class (added to <html> by a tiny inline script) is what enables
+   the subtle offset that animates away on scroll. Without JS, elements stay
+   in their normal, fully-visible state. */
 .reveal {
-    opacity: 0;
+    opacity: 1;
 }
 
-.reveal.active {
-    animation: fadeInUp 0.8s ease-out forwards;
+.js .reveal {
+    opacity: 1;
+    transform: translateY(24px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.js .reveal.active {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* ==============================
