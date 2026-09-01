@@ -9,7 +9,7 @@ function generateToken(user) {
 }
 
 async function register(req, res) {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     try {
         const existing = await User.findOne({ email });
@@ -20,7 +20,7 @@ async function register(req, res) {
             });
         }
 
-        const user = await User.create({ name, email, password });
+        const user = await User.create({ name, email, password, role });
         const token = generateToken(user);
 
         return res.status(201).json({

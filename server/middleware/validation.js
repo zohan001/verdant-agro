@@ -141,7 +141,7 @@ function notFoundHandler(req, res) {
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function validateRegister(req, res, next) {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
     const errors = [];
 
     if (!name || !name.trim()) {
@@ -164,12 +164,17 @@ function validateRegister(req, res, next) {
         errors.push({ field: 'password', message: 'Password cannot exceed 128 characters.' });
     }
 
+    if (role && role !== 'farmer' && role !== 'trader') {
+        errors.push({ field: 'role', message: 'Role must be either farmer or trader.' });
+    }
+
     if (errors.length > 0) {
         return res.status(400).json({ success: false, message: 'Validation failed', errors });
     }
 
     req.body.name = name.trim();
     req.body.email = email.trim().toLowerCase();
+    req.body.role = role || 'farmer';
     next();
 }
 

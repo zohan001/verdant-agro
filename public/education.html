@@ -162,6 +162,14 @@
         let currentIndex = 0;
         let quizAnswers = [];
 
+        function fetchJSON(url, options = {}) {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 10000);
+            return fetch(url, { ...options, signal: controller.signal })
+                .then(res => res.json())
+                .finally(() => clearTimeout(timeout));
+        }
+
         function setupAuthNav() {
             const token = getToken();
             const auth = JSON.parse(localStorage.getItem('user') || 'null');
@@ -189,8 +197,7 @@
             if (category) params.set('category', category);
             const container = document.getElementById('articles-list');
             try {
-                const res = await fetch(`${API}/articles?${params.toString()}`);
-                const data = await res.json();
+                const data = await fetchJSON(`${API}/articles?${params.toString()}`);
                 if (!data.count) {
                     container.innerHTML = '<div class="text-center py-10 text-gray-500">No articles yet.</div>';
                     return;
@@ -212,8 +219,7 @@
 
         async function openArticle(id) {
             try {
-                const res = await fetch(`${API}/articles/${id}`);
-                const data = await res.json();
+                const data = await fetchJSON(`${API}/articles/${id}`);
                 if (!data.success) return;
                 const a = data.data.article;
                 const win = window.open('', '_blank');
@@ -230,8 +236,7 @@
             if (category) params.set('category', category);
             const container = document.getElementById('quizzes-list');
             try {
-                const res = await fetch(`${API}/quizzes?${params.toString()}`);
-                const data = await res.json();
+                const data = await fetchJSON(`${API}/quizzes?${params.toString()}`);
                 if (!data.count) {
                     container.innerHTML = '<div class="text-center py-10 text-gray-500">No quizzes available.</div>';
                     return;
@@ -253,8 +258,7 @@
 
         async function startQuiz(id) {
             try {
-                const res = await fetch(`${API}/quizzes/${id}`);
-                const data = await res.json();
+                const data = await fetchJSON(`${API}/quizzes/${id}`);
                 if (!data.success) return;
                 currentQuiz = data.data.quiz;
                 currentIndex = 0;
@@ -321,19 +325,18 @@
                 return;
             }
             try {
-                const res = await fetch(`${API}/quizzes/${currentQuiz._id}/submit`, {
+                const data = await fetchJSON(`${API}/quizzes/${currentQuiz._id}/submit`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ answers: quizAnswers })
                 });
-                const data = await res.json();
                 if (data.success) {
                     showResult(data.data);
                 } else {
                     alert(data.message || 'Failed to submit.');
                 }
             } catch (err) {
-                alert('Network error.');
+                alert('Network error or request timed out.');
             }
         }
 

@@ -83,16 +83,36 @@ npm start
 
 The application will be available at `http://localhost:3000`.
 
+### Seeding Demo Content
+
+```bash
+npm run seed
+```
+
+Loads starter content (knowledge-base articles, a quiz, a sample listing)
+and three demo accounts:
+
+| Role   | Email                | Password    |
+|--------|----------------------|-------------|
+| Admin  | admin@kcnpagro.org   | adminpass123 |
+| Farmer | farmer@example.com   | farmer123   |
+| Trader | trader@example.com   | trader123   |
+
+> **Note:** This project targets **MongoDB 4.4+**. MongoDB 5.0+ requires a
+> CPU with AVX support and will fail to start on older hardware. When using
+> Docker on such machines, use `mongo:4.4` (the `docker-compose.yml` already
+> does).
+
 ### Running Tests
 
 ```bash
-# Requires a running MongoDB (e.g. docker run -p 27017:27017 mongo)
+# Requires a running MongoDB (e.g. docker run -p 27017:27017 mongo:4.4)
 npm test
 ```
 
 The test script starts the server on a test port, verifies every API
-endpoint (health, contact, newsletter, 404, static files), and exits
-cleanly.
+endpoint (health, contact, newsletter, auth, products, articles, quizzes,
+404, static pages), and exits cleanly.
 
 ## 🔌 API Endpoints
 

@@ -217,6 +217,14 @@
             }
         }
 
+        function fetchJSON(url, options = {}) {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 10000);
+            return fetch(url, { ...options, signal: controller.signal })
+                .then(res => res.json())
+                .finally(() => clearTimeout(timeout));
+        }
+
         async function loadListings() {
             const search = document.getElementById('search-input').value.trim();
             const category = document.getElementById('category-filter').value;
@@ -225,12 +233,13 @@
             if (category) params.set('category', category);
             const url = `${API}/products?${params.toString()}`;
             try {
-                const res = await fetch(url);
-                const data = await res.json();
+                const data = await fetchJSON(url);
                 renderListings(data.count ? data.data : []);
             } catch (err) {
                 console.error('Failed to load listings:', err);
-                renderListings([]);
+                const grid = document.getElementById('listings-grid');
+                document.getElementById('listings-empty').classList.add('hidden');
+                grid.innerHTML = '<div class="col-span-full text-center py-16 text-red-400">Failed to load listings. Please make sure the server is running.</div>';
             }
         }
 
@@ -280,9 +289,8 @@
             if (token) headers['Authorization'] = `Bearer ${token}`;
 
             try {
-                const res = await fetch(`${API}/products`, { method: 'POST', headers, body: JSON.stringify(payload) });
-                const data = await res.json();
-                if (res.ok) {
+                const data = await fetchJSON(`${API}/products`, { method: 'POST', headers, body: JSON.stringify(payload) });
+                if (data.success) {
                     status.className = 'mt-4 p-4 rounded-xl bg-primary-500/10 border border-primary-500/20 text-primary-300 text-sm text-center';
                     status.textContent = data.message || 'Listing posted successfully!';
                     status.classList.remove('hidden');
@@ -295,7 +303,7 @@
                 }
             } catch (err) {
                 status.className = 'mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-300 text-sm text-center';
-                status.textContent = 'Network error. Please try again.';
+                status.textContent = 'Network error or timeout. Please try again.';
                 status.classList.remove('hidden');
             }
         }

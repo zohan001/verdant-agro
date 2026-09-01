@@ -72,6 +72,14 @@
                         <p id="name-error" class="text-red-400 text-xs mt-1 hidden" role="alert"></p>
                     </div>
                     <div class="mb-5">
+                        <label for="role" class="block text-sm font-medium text-gray-300 mb-2">Account Type <span class="text-red-400">*</span></label>
+                        <select id="role" required class="form-input w-full px-4 py-3 rounded-xl bg-dark-900 border border-white/10 text-white text-sm sm:text-base appearance-none">
+                            <option value="farmer" selected>Farmer</option>
+                            <option value="trader">Trader</option>
+                        </select>
+                        <p id="role-error" class="text-red-400 text-xs mt-1 hidden" role="alert"></p>
+                    </div>
+                    <div class="mb-5">
                         <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Email Address <span class="text-red-400">*</span></label>
                         <input type="email" id="email" required autocomplete="email" placeholder="you@example.com" class="form-input w-full px-4 py-3 rounded-xl bg-dark-900 border border-white/10 text-white placeholder-gray-500 text-sm sm:text-base">
                         <p id="email-error" class="text-red-400 text-xs mt-1 hidden" role="alert"></p>
@@ -149,7 +157,7 @@
                 const res = await fetch('/api/auth/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name: name.value, email: email.value, password: password.value })
+                    body: JSON.stringify({ name: name.value, email: email.value, password: password.value, role: document.getElementById('role').value })
                 });
                 const data = await res.json();
                 submitText.textContent = 'Create Account';

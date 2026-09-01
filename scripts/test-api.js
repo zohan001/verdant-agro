@@ -123,11 +123,12 @@ const request = (path, options = {}) => {
         const email = `user_${Date.now()}@test.com`;
         res = await request('/api/auth/register', {
             method: 'POST',
-            body: { name: 'Test User', email, password: 'secret123' }
+            body: { name: 'Test User', email, password: 'secret123', role: 'trader' }
         });
         console.log(`[10] Register ${res.status}: ${res.body.message}`);
         console.assert(res.status === 201, 'Register should be 201');
         console.assert(res.body.data && res.body.data.token, 'Register should return a token');
+        console.assert(res.body.data.user.role === 'trader', 'Role should be saved');
         const userToken = res.body.data.token;
         const userId = res.body.data.user._id;
 
@@ -138,6 +139,14 @@ const request = (path, options = {}) => {
         });
         console.log(`[11] Register duplicate ${res.status}: expect 400`);
         console.assert(res.status === 400, 'Duplicate register should be 400');
+
+        // 11b. Register with invalid role
+        res = await request('/api/auth/register', {
+            method: 'POST',
+            body: { name: 'Bad Role', email: `bad_${Date.now()}@test.com`, password: 'secret123', role: 'admin' }
+        });
+        console.log(`[11b] Register invalid role ${res.status}: expect 400`);
+        console.assert(res.status === 400, 'Register with admin role should be 400');
 
         // 12. Login valid
         res = await request('/api/auth/login', {
