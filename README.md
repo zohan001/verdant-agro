@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-# verdant-agro
-=======
-# ============================================
 # Verdant Agro - Full Stack Application
 # ============================================
 # Climate Smart Agriculture & Trade Initiative
@@ -100,13 +96,29 @@ cleanly.
 
 ## 🔌 API Endpoints
 
-| Method | Endpoint            | Description                          |
-|--------|---------------------|--------------------------------------|
-| GET    | `/api/health`       | Service health check                 |
-| POST   | `/api/contact`      | Submit a contact message             |
-| GET    | `/api/contact`      | Get all contact messages (admin)     |
-| POST   | `/api/newsletter`   | Subscribe to newsletter              |
-| GET    | `/api/newsletter`   | Get all subscribers (admin)          |
+| Method   | Endpoint              | Description                                   |
+|----------|-----------------------|-----------------------------------------------|
+| GET      | `/api/health`         | Service health check                          |
+| POST     | `/api/contact`        | Submit a contact message                      |
+| GET      | `/api/contact`        | Get all contact messages (admin)              |
+| POST     | `/api/newsletter`     | Subscribe to newsletter                       |
+| GET      | `/api/newsletter`     | Get all subscribers (admin)                   |
+| POST     | `/api/auth/register`  | Register a new user (returns JWT)             |
+| POST     | `/api/auth/login`     | Login with email/password (returns JWT)       |
+| GET      | `/api/auth/profile`   | Get the authenticated user's profile          |
+| POST     | `/api/products`       | Create a marketplace listing                  |
+| GET      | `/api/products`       | List listings (category/search/pagination)    |
+| GET      | `/api/products/:id`   | Get a single listing                          |
+| PUT      | `/api/products/:id`   | Update a listing (owner/admin)                |
+| DELETE   | `/api/products/:id`   | Delete a listing (owner/admin)                |
+| POST     | `/api/articles`       | Create a knowledge-base article (admin)       |
+| GET      | `/api/articles`       | List published articles                       |
+| GET      | `/api/articles/:id`   | Get single article (by id or slug)            |
+| POST     | `/api/quizzes`        | Create a quiz (admin)                         |
+| GET      | `/api/quizzes`        | List published quizzes                        |
+| GET      | `/api/quizzes/:id`    | Get a quiz (correct answers hidden)           |
+| POST     | `/api/quizzes/:id/submit` | Submit answers and get a score            |
+| PUT/DELETE| `/api/articles/:id`, `/api/quizzes/:id` | Admin update/delete        |
 
 ### Example: Contact Form Submission
 
@@ -120,6 +132,29 @@ cleanly.
   "message": "I'd like to discuss a partnership opportunity."
 }
 ```
+
+### Example: User Registration
+
+```json
+// POST /api/auth/register
+{
+  "name": "Jane Farmer",
+  "email": "jane@example.com",
+  "password": "secret123"
+}
+```
+
+### Example: Quiz Submission
+
+```json
+// POST /api/quizzes/:id/submit
+{
+  "answers": [1, 0, 2]
+}
+```
+
+Authenticated endpoints require an `Authorization: Bearer <token>` header obtained
+from the register/login responses.
 
 ## 🐳 Docker Deployment (Local)
 
@@ -226,4 +261,3 @@ Verdant Agro Team
 ---
 
 © 2026 Verdant Agro. All rights reserved.
->>>>>>> 0120540 (Initial commit: Verdant Agro full-stack climate-smart agriculture & trade website)

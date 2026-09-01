@@ -16,13 +16,15 @@ const createApp = require('../server/app');
 const request = (path, options = {}) => {
     const http = require('http');
     const data = options.body ? JSON.stringify(options.body) : null;
+    const headers = data ? { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(data) } : {};
+    if (options.token) headers['Authorization'] = `Bearer ${options.token}`;
     return new Promise((resolve, reject) => {
         const req = http.request({
             host: '127.0.0.1',
             port: 3210,
             path,
             method: options.method || 'GET',
-            headers: data ? { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(data) } : {}
+            headers
         }, (res) => {
             let body = '';
             res.on('data', c => body += c);
@@ -80,9 +82,10 @@ const request = (path, options = {}) => {
         console.assert(res.status === 400, 'Invalid contact should be 400');
 
         // 4. Newsletter subscribe
+        const subEmail = `sub_${Date.now()}@test.com`;
         res = await request('/api/newsletter', {
             method: 'POST',
-            body: { email: 'sub@test.com' }
+            body: { email: subEmail }
         });
         console.log(`[4] Newsletter (new) ${res.status}: ${res.body.message}`);
         console.assert(res.status === 201, 'Newsletter subscribe should be 201');
@@ -90,7 +93,7 @@ const request = (path, options = {}) => {
         // 5. Newsletter duplicate
         res = await request('/api/newsletter', {
             method: 'POST',
-            body: { email: 'sub@test.com' }
+            body: { email: subEmail }
         });
         console.log(`[5] Newsletter (duplicate) ${res.status}: ${res.body.message}`);
         console.assert(res.status === 200, 'Duplicate should be 200');
@@ -115,6 +118,205 @@ const request = (path, options = {}) => {
         res = await request('/');
         console.log(`[9] Static index ${res.status}: content-type=${res.body.contentType || 'n/a'}`);
         console.assert(res.status === 200, 'Static index should be 200');
+
+        // 10. Register a user
+        const email = `user_${Date.now()}@test.com`;
+        res = await request('/api/auth/register', {
+            method: 'POST',
+            body: { name: 'Test User', email, password: 'secret123' }
+        });
+        console.log(`[10] Register ${res.status}: ${res.body.message}`);
+        console.assert(res.status === 201, 'Register should be 201');
+        console.assert(res.body.data && res.body.data.token, 'Register should return a token');
+        const userToken = res.body.data.token;
+        const userId = res.body.data.user._id;
+
+        // 11. Register duplicate
+        res = await request('/api/auth/register', {
+            method: 'POST',
+            body: { name: 'Test User', email, password: 'secret123' }
+        });
+        console.log(`[11] Register duplicate ${res.status}: expect 400`);
+        console.assert(res.status === 400, 'Duplicate register should be 400');
+
+        // 12. Login valid
+        res = await request('/api/auth/login', {
+            method: 'POST',
+            body: { email, password: 'secret123' }
+        });
+        console.log(`[12] Login ${res.status}: ${res.body.message}`);
+        console.assert(res.status === 200, 'Login should be 200');
+        console.assert(res.body.data && res.body.data.token, 'Login should return a token');
+
+        // 13. Login invalid password
+        res = await request('/api/auth/login', {
+            method: 'POST',
+            body: { email, password: 'wrongpass' }
+        });
+        console.log(`[13] Login wrong password ${res.status}: expect 401`);
+        console.assert(res.status === 401, 'Login with wrong password should be 401');
+
+        // 14. Profile without token
+        res = await request('/api/auth/profile');
+        console.log(`[14] Profile no token ${res.status}: expect 401`);
+        console.assert(res.status === 401, 'Profile without token should be 401');
+
+        // 15. Profile with token
+        res = await request('/api/auth/profile', { token: userToken });
+        console.log(`[15] Profile with token ${res.status}: name=${res.body.data && res.body.data.user && res.body.data.user.name}`);
+        console.assert(res.status === 200, 'Profile with token should be 200');
+
+        // 16. Create a product listing
+        res = await request('/api/products', {
+            method: 'POST',
+            body: {
+                title: 'Organic Maize Seeds',
+                description: 'High-yield drought tolerant maize seeds suitable for climate smart farming.',
+                category: 'seeds',
+                price: 15,
+                unit: 'kg',
+                location: 'Mombasa, Kenya',
+                contactEmail: 'farmer@test.com',
+                contactPhone: '+254700000000'
+            }
+        });
+        console.log(`[16] Create product ${res.status}: ${res.body.message}`);
+        console.assert(res.status === 201, 'Create product should be 201');
+        const productId = res.body.data.product._id;
+
+        // 17. Create product missing required fields
+        res = await request('/api/products', {
+            method: 'POST',
+            body: { title: 'Incomplete' }
+        });
+        console.log(`[17] Create product invalid ${res.status}: expect 400`);
+        console.assert(res.status === 400, 'Invalid product should be 400');
+
+        // 18. Get products
+        res = await request('/api/products');
+        console.log(`[18] Get products ${res.status}: count=${res.body.count}`);
+        console.assert(res.status === 200, 'Get products should be 200');
+        console.assert(res.body.count >= 1, 'Should be at least 1 product');
+
+        // 19. Get product by id
+        res = await request(`/api/products/${productId}`);
+        console.log(`[19] Get product ${res.status}: ${res.body.data && res.body.data.product && res.body.data.product.title}`);
+        console.assert(res.status === 200, 'Get product should be 200');
+
+        // 20. Update product without auth (should allow since created without seller? expect 200 from controller)
+        res = await request(`/api/products/${productId}`, {
+            method: 'PUT',
+            token: userToken,
+            body: { price: 18 }
+        });
+        console.log(`[20] Update product ${res.status}: ${res.body.message}`);
+        console.assert(res.status === 200, 'Update product should be 200');
+
+        // 21. Delete product
+        res = await request(`/api/products/${productId}`, { method: 'DELETE', token: userToken });
+        console.log(`[21] Delete product ${res.status}: ${res.body.message}`);
+        console.assert(res.status === 200, 'Delete product should be 200');
+
+        // 22. Create article requires admin - regular user should be forbidden
+        res = await request('/api/articles', {
+            method: 'POST',
+            token: userToken,
+            body: {
+                title: 'Test Article',
+                content: 'This is a sufficiently long article content for the knowledge base platform to be stored.',
+                category: 'soil-health'
+            }
+        });
+        console.log(`[22] Create article as user ${res.status}: expect 403`);
+        console.assert(res.status === 403, 'Create article as non-admin should be 403');
+
+        // 23. Seed admin user and create article
+        const User = require('../server/models/User');
+        const admin = await User.create({
+            name: 'Admin User',
+            email: `admin_${Date.now()}@test.com`,
+            password: 'adminpass123',
+            role: 'admin'
+        });
+        const adminToken = require('jsonwebtoken').sign(
+            { id: admin._id, role: admin.role },
+            require('../server/config').jwt.secret,
+            { expiresIn: '1h' }
+        );
+        res = await request('/api/articles', {
+            method: 'POST',
+            token: adminToken,
+            body: {
+                title: `Soil Health Guide ${Date.now()}`,
+                content: 'A comprehensive guide on improving soil health through organic practices, crop rotation, and composting.',
+                summary: 'A guide to healthy soils.',
+                category: 'soil-health',
+                tags: ['soil', 'compost', 'organic'],
+                published: true
+            }
+        });
+        console.log(`[23] Create article as admin ${res.status}: ${res.body.message}`);
+        console.assert(res.status === 201, 'Create article as admin should be 201');
+        const articleId = res.body.data.article._id;
+        const articleSlug = res.body.data.article.slug;
+
+        // 24. Get articles
+        res = await request('/api/articles');
+        console.log(`[24] Get articles ${res.status}: count=${res.body.count}`);
+        console.assert(res.status === 200, 'Get articles should be 200');
+        console.assert(res.body.count >= 1, 'Should be at least 1 article');
+
+        // 25. Get single article (by slug)
+        res = await request(`/api/articles/${articleSlug}`);
+        console.log(`[25] Get article by slug ${res.status}`);
+        console.assert(res.status === 200, 'Get article by slug should be 200');
+
+        // 26. Create quiz as admin
+        res = await request('/api/quizzes', {
+            method: 'POST',
+            token: adminToken,
+            body: {
+                title: 'Climate Smart Basics',
+                description: 'Test your knowledge of climate smart agriculture.',
+                category: 'climate-basics',
+                published: true,
+                questions: [
+                    { question: 'What is climate smart agriculture?', options: ['Farming that ignores climate', 'Agriculture that adapts to climate change', 'Indoor farming', 'None'], correctIndex: 1, explanation: 'CSA adapts to and mitigates climate change.' },
+                    { question: 'Which practice conserves soil?', options: ['Burning residue', 'Crop rotation', 'Overgrazing', 'Deforestation'], correctIndex: 1, explanation: 'Crop rotation improves soil health.' }
+                ]
+            }
+        });
+        console.log(`[26] Create quiz ${res.status}: ${res.body.message}`);
+        console.assert(res.status === 201, 'Create quiz should be 201');
+        const quizId = res.body.data.quiz._id;
+
+        // 27. Get quizzes
+        res = await request('/api/quizzes');
+        console.log(`[27] Get quizzes ${res.status}: count=${res.body.count}`);
+        console.assert(res.status === 200, 'Get quizzes should be 200');
+        console.assert(res.body.count >= 1, 'Should be at least 1 quiz');
+
+        // 28. Get quiz (should not expose correctIndex)
+        res = await request(`/api/quizzes/${quizId}`);
+        console.log(`[28] Get quiz ${res.status}`);
+        console.assert(res.status === 200, 'Get quiz should be 200');
+        console.assert(JSON.stringify(res.body.data.quiz).includes('correctIndex') === false, 'correctIndex should be hidden');
+
+        // 29. Submit quiz answers (one correct, one incorrect)
+        res = await request(`/api/quizzes/${quizId}/submit`, {
+            method: 'POST',
+            body: { answers: [1, 0] }
+        });
+        console.log(`[29] Submit quiz ${res.status}: score=${res.body.data && res.body.data.score}/${res.body.data && res.body.data.total}`);
+        console.assert(res.status === 200, 'Submit quiz should be 200');
+        console.assert(res.body.data.score === 1, 'Score should be 1');
+
+        // 30. New page URLs serve correctly
+        for (const page of ['/marketplace', '/education', '/login', '/register']) {
+            res = await request(page);
+            console.log(`[30] Page ${page} ${res.status}`);
+            console.assert(res.status === 200, `${page} should be 200`);
+        }
 
         console.log('\n=== All tests passed ===');
 

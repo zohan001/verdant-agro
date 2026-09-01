@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KCNP Agro Marketplace - Buy and sell climate-smart agriculture products and services">
+    <title>Marketplace | KCNP Agro</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header id="navbar" class="fixed top-0 left-0 right-0 z-50 nav-blur border-b border-white/5">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" role="navigation" aria-label="Main navigation">
+            <div class="flex items-center justify-between h-16 md:h-20">
+                <a href="/" class="flex items-center gap-2 group" aria-label="KCNP Agro Home">
+                    <img src="/logo.jpg" alt="KCNP Agro logo" class="w-10 h-10 rounded-xl object-cover transition-transform duration-300 group-hover:scale-110" width="40" height="40">
+                    <span class="font-heading font-bold text-xl text-white">KCNP<span class="text-primary-400">Agro</span></span>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="/" class="text-sm font-medium text-gray-300 hover:text-primary-400 transition-colors duration-300">Home</a>
+                    <a href="/marketplace" class="text-sm font-medium text-primary-400 transition-colors duration-300">Marketplace</a>
+                    <a href="/education" class="text-sm font-medium text-gray-300 hover:text-primary-400 transition-colors duration-300">Education</a>
+                    <span id="nav-auth-desktop" class="hidden md:inline-flex"></span>
+                </div>
+                <div class="hidden md:block">
+                    <a href="/marketplace" class="cta-btn inline-flex items-center px-5 py-2.5 rounded-xl text-white font-semibold text-sm">
+                        <span>Post Listing</span>
+                    </a>
+                </div>
+                <button id="mobile-menu-btn" class="hamburger md:hidden flex flex-col justify-center items-center w-10 h-10 gap-1.5" aria-label="Toggle mobile menu" aria-expanded="false" aria-controls="mobile-menu">
+                    <span class="block w-6 h-0.5 bg-white rounded-full"></span>
+                    <span class="block w-6 h-0.5 bg-white rounded-full"></span>
+                    <span class="block w-6 h-0.5 bg-white rounded-full"></span>
+                </button>
+            </div>
+            <div id="mobile-menu" class="mobile-menu closed md:hidden pb-4" role="menu">
+                <div class="flex flex-col gap-2 pt-2">
+                    <a href="/" class="block px-4 py-3 rounded-lg text-gray-300 hover:text-primary-400 hover:bg-white/5 transition-all duration-300" role="menuitem">Home</a>
+                    <a href="/marketplace" class="block px-4 py-3 rounded-lg text-primary-400 hover:bg-white/5 transition-all duration-300" role="menuitem">Marketplace</a>
+                    <a href="/education" class="block px-4 py-3 rounded-lg text-gray-300 hover:text-primary-400 hover:bg-white/5 transition-all duration-300" role="menuitem">Education</a>
+                    <div id="nav-auth-mobile" class="pt-2 px-4"></div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main-content" class="pt-20 md:pt-24">
+        <section class="relative py-12 md:py-16">
+            <div class="hero-orb-1" aria-hidden="true"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+                <div class="text-center mb-10 reveal">
+                    <span class="inline-block text-sm font-semibold text-primary-400 uppercase tracking-widest mb-4">Marketplace</span>
+                    <h1 class="font-heading text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
+                        Climate Smart <span class="gradient-text">Trade Hub</span>
+                    </h1>
+                    <p class="max-w-2xl mx-auto text-gray-400 text-base sm:text-lg">
+                        Buy and sell quality farm produce, seeds, tools, and services that support sustainable agriculture.
+                    </p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 mb-8 reveal">
+                    <input type="text" id="search-input" placeholder="Search listings..." class="flex-1 px-4 py-3 rounded-xl bg-dark-900 border border-white/10 text-white placeholder-gray-500 text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all">
+                    <select id="category-filter" class="px-4 py-3 rounded-xl bg-dark-900 border border-white/10 text-white text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-all">
+                        <option value="">All Categories</option>
+                        <option value="seeds">Seeds</option>
+                        <option value="tools">Tools</option>
+                        <option value="fertilizer">Fertilizer</option>
+                        <option value="livestock">Livestock</option>
+                        <option value="produce">Produce</option>
+                        <option value="equipment">Equipment</option>
+                        <option value="services">Services</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <button id="search-btn" class="cta-btn px-6 py-3 rounded-xl text-white font-semibold text-sm">Search</button>
+                </div>
+
+                <div class="text-right mb-4">
+                    <button id="toggle-form-btn" class="text-primary-400 hover:text-primary-300 text-sm font-semibold">+ Post a Listing</button>
+                </div>
+
+                <div id="listing-form-container" class="hidden mb-10 reveal">
+                    <form id="listing-form" class="glass-card rounded-2xl p-6 sm:p-8" novalidate>
+                        <h2 class="font-heading text-xl font-bold text-white mb-6">Post a New Listing</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div class="md:col-span-2">
+                                <label for="l-title" class="block text-sm font-medium text-gray-300 mb-2">Title <span class="text-red-400">*</span></label>
+                                <input type="text" id="l-title" required placeholder="e.g. Organic maize seeds" class="form-input w-full px-4 py-3 rounded-xl bg-dark-900 border border-white/10 text-white placeholder-gray-500 text-sm sm:text-base">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="l-description" class="block text-sm font-medium text-gray-300 mb-2">Description <span class="text-red-400">*</span></label>
+                                <textarea id="l-description" required rows="4" placeholder="Describe your product or service..." class="form-input w-full px-4 py-3 rounded-xl bg-dark-900 border border-white/10 text-white placeholder-gray-500 text-sm sm:text-base"></textarea>
+                            </div>
+                            <div>
+                                <label for="l-category" class="block text-sm font-medium text-gray-300 mb-2">Category <span class="text-red-400">*</span></label>
+                                <select id="l-category" required class="form-input w-full px-4 py-3 rounded-xl bg-dark-900 border border-white/10 text-white text-sm sm:text-base">
+                                    <option value="seeds">Seeds</option>
+                                    <option value="tools">Tools</option>
+                                    <option value="fertilizer">Fertilizer</option>
+                                    <option value="livestock">Livestock</option>
+                                    <option value="produce">Produce</option>
+                                    <option value="equipment">Equipment</option>
+                                    <option value="services">Services</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="l-price" class="block text-sm font-medium text-gray-300 mb-2">Price</label>
+                                <input type="number" id="l-price" min="0" step="0.01" placeholder="0.00" class="form-input w-full px-4 py-3 rounded-xl bg-dark-900 border border-white/10 text-white placeholder-gray-500 text-sm sm:text-base">
+                            </div>
+                            <div>
+                                <label for="l-unit" class="block text-sm font-medium text-gray-300 mb-2">Unit</label>
+                                <input type="text" id="l-unit" placeholder="e.g. kg, bag, unit" class="form-input w-full px-4 py-3 rounded-xl bg-dark-900 border border-white/10 text-white placeholder-gray-500 text-sm sm:text-base">
+                            </div>
+                            <div>
+                                <label for="l-location" class="block text-sm font-medium text-gray-300 mb-2">Location</label>
+                                <input type="text" id="l-location" placeholder="e.g. Mombasa, Kenya" class="form-input w-full px-4 py-3 rounded-xl bg-dark-900 border border-white/10 text-white placeholder-gray-500 text-sm sm:text-base">
+                            </div>
+                            <div>
+                                <label for="l-contactEmail" class="block text-sm font-medium text-gray-300 mb-2">Contact Email <span class="text-red-400">*</span></label>
+                                <input type="email" id="l-contactEmail" required placeholder="you@example.com" class="form-input w-full px-4 py-3 rounded-xl bg-dark-900 border border-white/10 text-white placeholder-gray-500 text-sm sm:text-base">
+                            </div>
+                            <div>
+                                <label for="l-contactPhone" class="block text-sm font-medium text-gray-300 mb-2">Contact Phone</label>
+                                <input type="tel" id="l-contactPhone" placeholder="+254 7XX XXX XXX" class="form-input w-full px-4 py-3 rounded-xl bg-dark-900 border border-white/10 text-white placeholder-gray-500 text-sm sm:text-base">
+                            </div>
+                        </div>
+                        <button type="submit" class="cta-btn w-full md:w-auto mt-6 px-6 py-3 rounded-xl text-white font-semibold text-sm">Post Listing</button>
+                        <div id="listing-status" class="mt-4 p-4 rounded-xl hidden text-sm text-center"></div>
+                    </form>
+                </div>
+
+                <div id="listings-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                    <div class="col-span-full text-center py-16 text-gray-500">Loading listings...</div>
+                </div>
+
+                <div id="listings-empty" class="hidden text-center py-16 text-gray-500">
+                    No listings found. Be the first to post!
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-white/5 py-12 md:py-16" role="contentinfo">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+                <div class="lg:col-span-1">
+                    <a href="/" class="flex items-center gap-2 mb-4" aria-label="KCNP Agro Home">
+                        <img src="/logo.jpg" alt="KCNP Agro logo" class="w-10 h-10 rounded-xl object-cover" width="40" height="40">
+                        <span class="font-heading font-bold text-xl text-white">KCNP<span class="text-primary-400">Agro</span></span>
+                    </a>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">Promoting climate smart agriculture and trade initiatives for sustainable economic growth worldwide.</p>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Quick Links</h3>
+                    <ul class="space-y-3">
+                        <li><a href="/" class="text-gray-500 hover:text-primary-400 text-sm transition-colors">Home</a></li>
+                        <li><a href="/marketplace" class="text-gray-500 hover:text-primary-400 text-sm transition-colors">Marketplace</a></li>
+                        <li><a href="/education" class="text-gray-500 hover:text-primary-400 text-sm transition-colors">Education</a></li>
+                        <li><a href="/login" class="text-gray-500 hover:text-primary-400 text-sm transition-colors">Login</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Services</h3>
+                    <ul class="space-y-3">
+                        <li><a href="/" class="text-gray-500 hover:text-primary-400 text-sm transition-colors">Climate Smart Farming</a></li>
+                        <li><a href="/" class="text-gray-500 hover:text-primary-400 text-sm transition-colors">Trade Facilitation</a></li>
+                        <li><a href="/" class="text-gray-500 hover:text-primary-400 text-sm transition-colors">Supply Chain</a></li>
+                        <li><a href="/" class="text-gray-500 hover:text-primary-400 text-sm transition-colors">Capacity Building</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Contact</h3>
+                    <ul class="space-y-3">
+                        <li><a href="mailto:kabulmatano027@gmail.com" class="text-gray-500 hover:text-primary-400 text-sm transition-colors">Email Us</a></li>
+                        <li><a href="/privacy" class="text-gray-500 hover:text-primary-400 text-sm transition-colors">Privacy Policy</a></li>
+                        <li><a href="/terms" class="text-gray-500 hover:text-primary-400 text-sm transition-colors">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p class="text-gray-600 text-xs sm:text-sm">&copy; <span id="current-year"></span> KCNP Agro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const API = '/api';
+        const getToken = () => localStorage.getItem('token');
+
+        function setupAuthNav() {
+            const token = getToken();
+            const auth = JSON.parse(localStorage.getItem('user') || 'null');
+            const desktop = document.getElementById('nav-auth-desktop');
+            const mobile = document.getElementById('nav-auth-mobile');
+            if (desktop) {
+                if (token && auth) {
+                    desktop.innerHTML = `<a href="#" onclick="logout()" class="text-sm font-medium text-gray-300 hover:text-primary-400 transition-colors">Logout (${auth.name.split(' ')[0]})</a>`;
+                } else {
+                    desktop.innerHTML = `<a href="/login" class="text-sm font-medium text-gray-300 hover:text-primary-400 transition-colors">Login</a>`;
+                }
+            }
+            if (mobile) {
+                if (token && auth) {
+                    mobile.innerHTML = `<a href="#" onclick="logout()" class="block px-4 py-3 rounded-lg text-gray-300 hover:text-primary-400 hover:bg-white/5 transition-all duration-300">Logout (${auth.name.split(' ')[0]})</a>`;
+                } else {
+                    mobile.innerHTML = `<a href="/login" class="block px-4 py-3 rounded-lg text-primary-400 hover:bg-white/5 transition-all duration-300">Login / Register</a>`;
+                }
+            }
+        }
+
+        async function loadListings() {
+            const search = document.getElementById('search-input').value.trim();
+            const category = document.getElementById('category-filter').value;
+            const params = new URLSearchParams();
+            if (search) params.set('search', search);
+            if (category) params.set('category', category);
+            const url = `${API}/products?${params.toString()}`;
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+                renderListings(data.count ? data.data : []);
+            } catch (err) {
+                console.error('Failed to load listings:', err);
+                renderListings([]);
+            }
+        }
+
+        function renderListings(listings) {
+            const grid = document.getElementById('listings-grid');
+            const empty = document.getElementById('listings-empty');
+            if (!listings.length) {
+                grid.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+            empty.classList.add('hidden');
+            grid.innerHTML = listings.map(p => `
+                <article class="glass-card rounded-2xl p-6 reveal active">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="inline-block px-3 py-1 rounded-full bg-primary-500/10 text-primary-300 text-xs font-semibold uppercase tracking-wide">${p.category}</span>
+                        ${p.price ? `<span class="text-accent-400 font-bold text-lg">$${Number(p.price).toFixed(2)}${p.unit ? '/' + p.unit : ''}</span>` : '<span class="text-gray-500 text-sm">Price on request</span>'}
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">${p.title}</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4 line-clamp-3">${p.description}</p>
+                    ${p.location ? `<p class="text-gray-500 text-xs mb-1">📍 ${p.location}</p>` : ''}
+                    <div class="pt-3 border-t border-white/5 mt-3">
+                        <h4 class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">Contact</h4>
+                        <a href="mailto:${p.contactEmail}" class="text-primary-400 hover:text-primary-300 text-sm block truncate">${p.contactEmail}</a>
+                        ${p.contactPhone ? `<a href="tel:${p.contactPhone}" class="text-gray-400 hover:text-primary-400 text-sm block truncate">${p.contactPhone}</a>` : ''}
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        async function submitListing(e) {
+            e.preventDefault();
+            const status = document.getElementById('listing-status');
+            const payload = {
+                title: document.getElementById('l-title').value.trim(),
+                description: document.getElementById('l-description').value.trim(),
+                category: document.getElementById('l-category').value,
+                price: document.getElementById('l-price').value ? Number(document.getElementById('l-price').value) : 0,
+                unit: document.getElementById('l-unit').value.trim(),
+                location: document.getElementById('l-location').value.trim(),
+                contactEmail: document.getElementById('l-contactEmail').value.trim(),
+                contactPhone: document.getElementById('l-contactPhone').value.trim()
+            };
+
+            const headers = { 'Content-Type': 'application/json' };
+            const token = getToken();
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+
+            try {
+                const res = await fetch(`${API}/products`, { method: 'POST', headers, body: JSON.stringify(payload) });
+                const data = await res.json();
+                if (res.ok) {
+                    status.className = 'mt-4 p-4 rounded-xl bg-primary-500/10 border border-primary-500/20 text-primary-300 text-sm text-center';
+                    status.textContent = data.message || 'Listing posted successfully!';
+                    status.classList.remove('hidden');
+                    document.getElementById('listing-form').reset();
+                    loadListings();
+                } else {
+                    status.className = 'mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-300 text-sm text-center';
+                    status.textContent = data.message || 'Failed to post listing.';
+                    status.classList.remove('hidden');
+                }
+            } catch (err) {
+                status.className = 'mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-300 text-sm text-center';
+                status.textContent = 'Network error. Please try again.';
+                status.classList.remove('hidden');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setupAuthNav();
+            loadListings();
+
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    const isOpen = mobileMenu.classList.contains('open');
+                    if (isOpen) {
+                        mobileMenu.classList.remove('open');
+                        mobileMenu.classList.add('closed');
+                        mobileMenuBtn.classList.remove('active');
+                        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                    } else {
+                        mobileMenu.classList.remove('closed');
+                        mobileMenu.classList.add('open');
+                        mobileMenuBtn.classList.add('active');
+                        mobileMenuBtn.setAttribute('aria-expanded', 'true');
+                    }
+                });
+            }
+
+            document.getElementById('search-btn').addEventListener('click', loadListings);
+            document.getElementById('search-input').addEventListener('keydown', e => { if (e.key === 'Enter') loadListings(); });
+            document.getElementById('category-filter').addEventListener('change', loadListings);
+            document.getElementById('listing-form').addEventListener('submit', submitListing);
+            document.getElementById('toggle-form-btn').addEventListener('click', () => {
+                const container = document.getElementById('listing-form-container');
+                container.classList.toggle('hidden');
+            });
+
+            const yearEl = document.getElementById('current-year');
+            if (yearEl) yearEl.textContent = new Date().getFullYear();
+        });
+    </script>
+</body>
+</html>

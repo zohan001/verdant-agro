@@ -42,8 +42,8 @@ function createApp() {
     // Enable CORS for cross-origin requests
     app.use(cors({
         origin: config.cors.origin,
-        methods: ['GET', 'POST'],
-        allowedHeaders: ['Content-Type', 'Accept'],
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
         credentials: false
     }));
 
@@ -81,6 +81,20 @@ function createApp() {
     });
     app.get('/terms', (req, res) => {
         res.sendFile(path.join(__dirname, '..', 'public', 'terms.html'));
+    });
+
+    // App pages (clean URLs for the SPA sections)
+    app.get(['/marketplace', '/marketplace/'], (req, res) => {
+        res.sendFile(path.join(__dirname, '..', 'public', 'marketplace.html'));
+    });
+    app.get(['/education', '/education/'], (req, res) => {
+        res.sendFile(path.join(__dirname, '..', 'public', 'education.html'));
+    });
+    app.get(['/login', '/login/'], (req, res) => {
+        res.sendFile(path.join(__dirname, '..', 'public', 'login.html'));
+    });
+    app.get(['/register', '/register/'], (req, res) => {
+        res.sendFile(path.join(__dirname, '..', 'public', 'register.html'));
     });
 
     // ==============================

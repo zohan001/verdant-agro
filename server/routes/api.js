@@ -1,49 +1,75 @@
-/**
- * ============================================
- * API Routes
- * ============================================
- * Mounts all API endpoint controllers.
- * ============================================
- */
-
 const express = require('express');
 const router = express.Router();
 
-// Import controllers
 const contactController = require('../controllers/contactController');
 const newsletterController = require('../controllers/newsletterController');
+const authController = require('../controllers/authController');
+const productController = require('../controllers/productController');
+const articleController = require('../controllers/articleController');
+const quizController = require('../controllers/quizController');
 
-// Import validation middleware
 const {
     validateContactMessage,
-    validateNewsletter
+    validateNewsletter,
+    validateRegister,
+    validateLogin,
+    validateProduct,
+    validateArticle,
+    validateQuiz
 } = require('../middleware/validation');
+
+const { authenticate, authorize } = require('../middleware/auth');
 
 // ==============================
 // Contact Message Routes
 // ==============================
-
-// POST /api/contact - Submit a contact message
 router.post('/contact', validateContactMessage, contactController.submitContact);
-
-// GET /api/contact - Get all contact messages (admin)
 router.get('/contact', contactController.getContacts);
 
 // ==============================
 // Newsletter Routes
 // ==============================
-
-// POST /api/newsletter - Subscribe to newsletter
 router.post('/newsletter', validateNewsletter, newsletterController.subscribe);
-
-// GET /api/newsletter - Get all subscribers (admin)
 router.get('/newsletter', newsletterController.getSubscribers);
+
+// ==============================
+// Auth Routes
+// ==============================
+router.post('/auth/register', validateRegister, authController.register);
+router.post('/auth/login', validateLogin, authController.login);
+router.get('/auth/profile', authenticate, authController.getProfile);
+
+// ==============================
+// Product / Marketplace Routes
+// ==============================
+router.post('/products', validateProduct, productController.createProduct);
+router.get('/products', productController.getProducts);
+router.get('/products/:id', productController.getProduct);
+router.put('/products/:id', authenticate, productController.updateProduct);
+router.delete('/products/:id', authenticate, productController.deleteProduct);
+
+// ==============================
+// Article / Knowledge Base Routes
+// ==============================
+router.post('/articles', authenticate, authorize('admin'), validateArticle, articleController.createArticle);
+router.get('/articles', articleController.getArticles);
+router.get('/articles/:id', articleController.getArticle);
+router.put('/articles/:id', authenticate, authorize('admin'), articleController.updateArticle);
+router.delete('/articles/:id', authenticate, authorize('admin'), articleController.deleteArticle);
+
+// ==============================
+// Quiz / Self-Assessment Routes
+// ==============================
+router.post('/quizzes', authenticate, authorize('admin'), validateQuiz, quizController.createQuiz);
+router.get('/quizzes', quizController.getQuizzes);
+router.get('/quizzes/:id', quizController.getQuiz);
+router.post('/quizzes/:id/submit', quizController.submitQuiz);
+router.put('/quizzes/:id', authenticate, authorize('admin'), quizController.updateQuiz);
+router.delete('/quizzes/:id', authenticate, authorize('admin'), quizController.deleteQuiz);
 
 // ==============================
 // Health Check
 // ==============================
-
-// GET /api/health - Service health check
 router.get('/health', (req, res) => {
     res.status(200).json({
         success: true,

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Create an account on KCNP Agro - Climate Smart Agriculture & Trade">
+    <title>Register | KCNP Agro</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header id="navbar" class="fixed top-0 left-0 right-0 z-50 nav-blur border-b border-white/5">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" role="navigation" aria-label="Main navigation">
+            <div class="flex items-center justify-between h-16 md:h-20">
+                <a href="/" class="flex items-center gap-2 group" aria-label="KCNP Agro Home">
+                    <img src="/logo.jpg" alt="KCNP Agro logo" class="w-10 h-10 rounded-xl object-cover transition-transform duration-300 group-hover:scale-110" width="40" height="40">
+                    <span class="font-heading font-bold text-xl text-white">KCNP<span class="text-primary-400">Agro</span></span>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="/" class="text-sm font-medium text-gray-300 hover:text-primary-400 transition-colors duration-300">Home</a>
+                    <a href="/marketplace" class="text-sm font-medium text-gray-300 hover:text-primary-400 transition-colors duration-300">Marketplace</a>
+                    <a href="/education" class="text-sm font-medium text-gray-300 hover:text-primary-400 transition-colors duration-300">Education</a>
+                    <a href="/login" class="text-sm font-medium text-gray-300 hover:text-primary-400 transition-colors duration-300">Login</a>
+                </div>
+                <div class="hidden md:block">
+                    <a href="/login" class="cta-btn inline-flex items-center px-5 py-2.5 rounded-xl text-white font-semibold text-sm">
+                        <span>Login</span>
+                    </a>
+                </div>
+                <button id="mobile-menu-btn" class="hamburger md:hidden flex flex-col justify-center items-center w-10 h-10 gap-1.5" aria-label="Toggle mobile menu" aria-expanded="false" aria-controls="mobile-menu">
+                    <span class="block w-6 h-0.5 bg-white rounded-full"></span>
+                    <span class="block w-6 h-0.5 bg-white rounded-full"></span>
+                    <span class="block w-6 h-0.5 bg-white rounded-full"></span>
+                </button>
+            </div>
+            <div id="mobile-menu" class="mobile-menu closed md:hidden pb-4" role="menu">
+                <div class="flex flex-col gap-2 pt-2">
+                    <a href="/" class="block px-4 py-3 rounded-lg text-gray-300 hover:text-primary-400 hover:bg-white/5 transition-all duration-300" role="menuitem">Home</a>
+                    <a href="/marketplace" class="block px-4 py-3 rounded-lg text-gray-300 hover:text-primary-400 hover:bg-white/5 transition-all duration-300" role="menuitem">Marketplace</a>
+                    <a href="/education" class="block px-4 py-3 rounded-lg text-gray-300 hover:text-primary-400 hover:bg-white/5 transition-all duration-300" role="menuitem">Education</a>
+                    <div class="pt-2 px-4">
+                        <a href="/login" class="cta-btn block text-center px-5 py-3 rounded-xl text-white font-semibold text-sm">Login</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main-content" class="pt-20 md:pt-24">
+        <section class="relative min-h-[80vh] flex items-center justify-center py-12 md:py-16">
+            <div class="hero-orb-1" aria-hidden="true"></div>
+            <div class="max-w-md w-full mx-auto px-4 sm:px-6 relative">
+                <div class="text-center mb-8 reveal">
+                    <span class="inline-block text-sm font-semibold text-primary-400 uppercase tracking-widest mb-4">Join Us</span>
+                    <h1 class="font-heading text-3xl font-bold text-white mb-2">Create <span class="gradient-text">Account</span></h1>
+                    <p class="text-gray-400 text-sm">Join the climate-smart agriculture community</p>
+                </div>
+
+                <form id="register-form" class="glass-card rounded-2xl p-6 sm:p-8 reveal" novalidate>
+                    <div class="mb-5">
+                        <label for="name" class="block text-sm font-medium text-gray-300 mb-2">Full Name <span class="text-red-400">*</span></label>
+                        <input type="text" id="name" required autocomplete="name" placeholder="Enter your full name" class="form-input w-full px-4 py-3 rounded-xl bg-dark-900 border border-white/10 text-white placeholder-gray-500 text-sm sm:text-base">
+                        <p id="name-error" class="text-red-400 text-xs mt-1 hidden" role="alert"></p>
+                    </div>
+                    <div class="mb-5">
+                        <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Email Address <span class="text-red-400">*</span></label>
+                        <input type="email" id="email" required autocomplete="email" placeholder="you@example.com" class="form-input w-full px-4 py-3 rounded-xl bg-dark-900 border border-white/10 text-white placeholder-gray-500 text-sm sm:text-base">
+                        <p id="email-error" class="text-red-400 text-xs mt-1 hidden" role="alert"></p>
+                    </div>
+                    <div class="mb-6">
+                        <label for="password" class="block text-sm font-medium text-gray-300 mb-2">Password <span class="text-red-400">*</span></label>
+                        <input type="password" id="password" required autocomplete="new-password" placeholder="At least 6 characters" class="form-input w-full px-4 py-3 rounded-xl bg-dark-900 border border-white/10 text-white placeholder-gray-500 text-sm sm:text-base">
+                        <p id="password-error" class="text-red-400 text-xs mt-1 hidden" role="alert"></p>
+                    </div>
+
+                    <button type="submit" class="cta-btn w-full py-4 rounded-xl text-white font-bold text-base flex items-center justify-center gap-2">
+                        <span id="submit-text">Create Account</span>
+                        <svg id="submit-spinner" class="w-5 h-5 animate-spin hidden" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                        </svg>
+                    </button>
+
+                    <div id="form-error" class="hidden mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-300 text-sm text-center" role="alert"></div>
+                </form>
+
+                <p class="text-center text-gray-500 text-sm mt-6">
+                    Already have an account? <a href="/login" class="text-primary-400 hover:text-primary-300 font-semibold">Login</a>
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-white/5 py-8" role="contentinfo">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p class="text-gray-600 text-xs sm:text-sm">&copy; <span id="current-year"></span> KCNP Agro. All rights reserved.</p>
+            <div class="flex gap-6">
+                <a href="/privacy" class="text-gray-600 hover:text-gray-400 text-xs sm:text-sm transition-colors">Privacy Policy</a>
+                <a href="/terms" class="text-gray-600 hover:text-gray-400 text-xs sm:text-sm transition-colors">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name');
+            const email = document.getElementById('email');
+            const password = document.getElementById('password');
+            const formError = document.getElementById('form-error');
+            const submitText = document.getElementById('submit-text');
+            const submitSpinner = document.getElementById('submit-spinner');
+
+            formError.classList.add('hidden');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!name.value.trim()) {
+                document.getElementById('name-error').textContent = 'Please enter your full name.';
+                document.getElementById('name-error').classList.remove('hidden');
+                name.classList.add('border-red-500');
+                return;
+            }
+            if (!emailRegex.test(email.value)) {
+                document.getElementById('email-error').textContent = 'Please enter a valid email address.';
+                document.getElementById('email-error').classList.remove('hidden');
+                email.classList.add('border-red-500');
+                return;
+            }
+            if (password.value.length < 6) {
+                document.getElementById('password-error').textContent = 'Password must be at least 6 characters.';
+                document.getElementById('password-error').classList.remove('hidden');
+                password.classList.add('border-red-500');
+                return;
+            }
+
+            submitText.textContent = 'Creating account...';
+            submitSpinner.classList.remove('hidden');
+
+            try {
+                const res = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: name.value, email: email.value, password: password.value })
+                });
+                const data = await res.json();
+                submitText.textContent = 'Create Account';
+                submitSpinner.classList.add('hidden');
+
+                if (res.ok && data.success) {
+                    localStorage.setItem('token', data.data.token);
+                    localStorage.setItem('user', JSON.stringify(data.data.user));
+                    formError.className = 'mt-4 p-4 rounded-xl bg-primary-500/10 border border-primary-500/20 text-primary-300 text-sm text-center';
+                    formError.textContent = 'Account created! Redirecting...';
+                    formError.classList.remove('hidden');
+                    setTimeout(() => { window.location.href = '/marketplace'; }, 1200);
+                } else {
+                    formError.className = 'mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-300 text-sm text-center';
+                    formError.textContent = data.message || 'Registration failed. Please try again.';
+                    formError.classList.remove('hidden');
+                }
+            } catch (err) {
+                submitText.textContent = 'Create Account';
+                submitSpinner.classList.add('hidden');
+                formError.className = 'mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-300 text-sm text-center';
+                formError.textContent = 'Network error. Please try again.';
+                formError.classList.remove('hidden');
+            }
+        });
+
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KCNP Agro Education - Climate smart agriculture knowledge base and self-assessment quizzes">
+    <title>Education | KCNP Agro</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header id="navbar" class="fixed top-0 left-0 right-0 z-50 nav-blur border-b border-white/5">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" role="navigation" aria-label="Main navigation">
+            <div class="flex items-center justify-between h-16 md:h-20">
+                <a href="/" class="flex items-center gap-2 group" aria-label="KCNP Agro Home">
+                    <img src="/logo.jpg" alt="KCNP Agro logo" class="w-10 h-10 rounded-xl object-cover transition-transform duration-300 group-hover:scale-110" width="40" height="40">
+                    <span class="font-heading font-bold text-xl text-white">KCNP<span class="text-primary-400">Agro</span></span>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="/" class="text-sm font-medium text-gray-300 hover:text-primary-400 transition-colors duration-300">Home</a>
+                    <a href="/marketplace" class="text-sm font-medium text-gray-300 hover:text-primary-400 transition-colors duration-300">Marketplace</a>
+                    <a href="/education" class="text-sm font-medium text-primary-400 transition-colors duration-300">Education</a>
+                    <span id="nav-auth-desktop" class="hidden md:inline-flex"></span>
+                </div>
+                <button id="mobile-menu-btn" class="hamburger md:hidden flex flex-col justify-center items-center w-10 h-10 gap-1.5" aria-label="Toggle mobile menu" aria-expanded="false" aria-controls="mobile-menu">
+                    <span class="block w-6 h-0.5 bg-white rounded-full"></span>
+                    <span class="block w-6 h-0.5 bg-white rounded-full"></span>
+                    <span class="block w-6 h-0.5 bg-white rounded-full"></span>
+                </button>
+            </div>
+            <div id="mobile-menu" class="mobile-menu closed md:hidden pb-4" role="menu">
+                <div class="flex flex-col gap-2 pt-2">
+                    <a href="/" class="block px-4 py-3 rounded-lg text-gray-300 hover:text-primary-400 hover:bg-white/5 transition-all duration-300" role="menuitem">Home</a>
+                    <a href="/marketplace" class="block px-4 py-3 rounded-lg text-gray-300 hover:text-primary-400 hover:bg-white/5 transition-all duration-300" role="menuitem">Marketplace</a>
+                    <a href="/education" class="block px-4 py-3 rounded-lg text-primary-400 hover:bg-white/5 transition-all duration-300" role="menuitem">Education</a>
+                    <div id="nav-auth-mobile" class="pt-2 px-4"></div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main-content" class="pt-20 md:pt-24">
+        <section class="relative py-12 md:py-16">
+            <div class="hero-orb-1" aria-hidden="true"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+                <div class="text-center mb-10 reveal">
+                    <span class="inline-block text-sm font-semibold text-accent-400 uppercase tracking-widest mb-4">Knowledge & Learning</span>
+                    <h1 class="font-heading text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
+                        Education <span class="gradient-text">Center</span>
+                    </h1>
+                    <p class="max-w-2xl mx-auto text-gray-400 text-base sm:text-lg">
+                        Learn climate-smart agricultural practices and test your knowledge with self-assessment quizzes.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    <div class="reveal">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="font-heading text-2xl font-bold text-white">Knowledge Base</h2>
+                            <select id="article-category" class="px-3 py-2 rounded-lg bg-dark-900 border border-white/10 text-white text-sm focus:border-primary-500 outline-none">
+                                <option value="">All Topics</option>
+                                <option value="climate-smart-farming">Climate Smart Farming</option>
+                                <option value="water-management">Water Management</option>
+                                <option value="soil-health">Soil Health</option>
+                                <option value="crop-diversification">Crop Diversification</option>
+                                <option value="carbon-credits">Carbon Credits</option>
+                                <option value="market-access">Market Access</option>
+                            </select>
+                        </div>
+                        <div id="articles-list" class="space-y-4">
+                            <div class="text-center py-10 text-gray-500">Loading articles...</div>
+                        </div>
+                    </div>
+
+                    <div class="reveal">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="font-heading text-2xl font-bold text-white">Self-Assessment Quizzes</h2>
+                            <select id="quiz-category" class="px-3 py-2 rounded-lg bg-dark-900 border border-white/10 text-white text-sm focus:border-primary-500 outline-none">
+                                <option value="">All Quizzes</option>
+                                <option value="climate-basics">Climate Basics</option>
+                                <option value="soil-management">Soil Management</option>
+                                <option value="water-conservation">Water Conservation</option>
+                                <option value="crop-planning">Crop Planning</option>
+                                <option value="carbon-footprint">Carbon Footprint</option>
+                            </select>
+                        </div>
+                        <div id="quizzes-list" class="space-y-4">
+                            <div class="text-center py-10 text-gray-500">Loading quizzes...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="quiz-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-dark-900/90 backdrop-blur-sm items-center justify-center p-4">
+        <div class="glass-card rounded-2xl p-6 sm:p-8 w-full max-w-2xl my-8">
+            <div class="flex items-center justify-between mb-6">
+                <h3 id="quiz-modal-title" class="font-heading text-xl font-bold text-white"></h3>
+                <button onclick="closeQuiz()" class="text-gray-400 hover:text-white text-2xl leading-none" aria-label="Close quiz">&times;</button>
+            </div>
+            <div id="quiz-question-container"></div>
+        </div>
+    </div>
+
+    <footer class="border-t border-white/5 py-12 md:py-16" role="contentinfo">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+                <div class="lg:col-span-1">
+                    <a href="/" class="flex items-center gap-2 mb-4" aria-label="KCNP Agro Home">
+                        <img src="/logo.jpg" alt="KCNP Agro logo" class="w-10 h-10 rounded-xl object-cover" width="40" height="40">
+                        <span class="font-heading font-bold text-xl text-white">KCNP<span class="text-primary-400">Agro</span></span>
+                    </a>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">Promoting climate smart agriculture and trade initiatives for sustainable economic growth worldwide.</p>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Quick Links</h3>
+                    <ul class="space-y-3">
+                        <li><a href="/" class="text-gray-500 hover:text-primary-400 text-sm transition-colors">Home</a></li>
+                        <li><a href="/marketplace" class="text-gray-500 hover:text-primary-400 text-sm transition-colors">Marketplace</a></li>
+                        <li><a href="/education" class="text-gray-500 hover:text-primary-400 text-sm transition-colors">Education</a></li>
+                        <li><a href="/login" class="text-gray-500 hover:text-primary-400 text-sm transition-colors">Login</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Services</h3>
+                    <ul class="space-y-3">
+                        <li><a href="/" class="text-gray-500 hover:text-primary-400 text-sm transition-colors">Climate Smart Farming</a></li>
+                        <li><a href="/" class="text-gray-500 hover:text-primary-400 text-sm transition-colors">Trade Facilitation</a></li>
+                        <li><a href="/" class="text-gray-500 hover:text-primary-400 text-sm transition-colors">Supply Chain</a></li>
+                        <li><a href="/" class="text-gray-500 hover:text-primary-400 text-sm transition-colors">Capacity Building</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Contact</h3>
+                    <ul class="space-y-3">
+                        <li><a href="mailto:kabulmatano027@gmail.com" class="text-gray-500 hover:text-primary-400 text-sm transition-colors">Email Us</a></li>
+                        <li><a href="/privacy" class="text-gray-500 hover:text-primary-400 text-sm transition-colors">Privacy Policy</a></li>
+                        <li><a href="/terms" class="text-gray-500 hover:text-primary-400 text-sm transition-colors">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p class="text-gray-600 text-xs sm:text-sm">&copy; <span id="current-year"></span> KCNP Agro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const API = '/api';
+        const getToken = () => localStorage.getItem('token');
+        let currentQuiz = null;
+        let currentIndex = 0;
+        let quizAnswers = [];
+
+        function setupAuthNav() {
+            const token = getToken();
+            const auth = JSON.parse(localStorage.getItem('user') || 'null');
+            const desktop = document.getElementById('nav-auth-desktop');
+            const mobile = document.getElementById('nav-auth-mobile');
+            if (desktop) {
+                if (token && auth) {
+                    desktop.innerHTML = `<a href="#" onclick="logout()" class="text-sm font-medium text-gray-300 hover:text-primary-400 transition-colors">Logout (${auth.name.split(' ')[0]})</a>`;
+                } else {
+                    desktop.innerHTML = `<a href="/login" class="text-sm font-medium text-gray-300 hover:text-primary-400 transition-colors">Login</a>`;
+                }
+            }
+            if (mobile) {
+                if (token && auth) {
+                    mobile.innerHTML = `<a href="#" onclick="logout()" class="block px-4 py-3 rounded-lg text-gray-300 hover:text-primary-400 hover:bg-white/5 transition-all duration-300">Logout (${auth.name.split(' ')[0]})</a>`;
+                } else {
+                    mobile.innerHTML = `<a href="/login" class="block px-4 py-3 rounded-lg text-primary-400 hover:bg-white/5 transition-all duration-300">Login / Register</a>`;
+                }
+            }
+        }
+
+        async function loadArticles() {
+            const category = document.getElementById('article-category').value;
+            const params = new URLSearchParams();
+            if (category) params.set('category', category);
+            const container = document.getElementById('articles-list');
+            try {
+                const res = await fetch(`${API}/articles?${params.toString()}`);
+                const data = await res.json();
+                if (!data.count) {
+                    container.innerHTML = '<div class="text-center py-10 text-gray-500">No articles yet.</div>';
+                    return;
+                }
+                container.innerHTML = data.data.map(a => `
+                    <article class="glass-card rounded-xl p-5 cursor-pointer hover:border-primary-500/30 transition-all" onclick="openArticle('${a._id}')">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="inline-block px-2 py-1 rounded-full bg-accent-500/10 text-accent-300 text-xs font-semibold uppercase tracking-wide">${a.category.replace(/-/g, ' ')}</span>
+                            <span class="text-gray-600 text-xs">${a.views || 0} views</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-1">${a.title}</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">${a.summary || 'Click to read more...'}</p>
+                    </article>
+                `).join('');
+            } catch (err) {
+                container.innerHTML = '<div class="text-center py-10 text-gray-500">Failed to load articles.</div>';
+            }
+        }
+
+        async function openArticle(id) {
+            try {
+                const res = await fetch(`${API}/articles/${id}`);
+                const data = await res.json();
+                if (!data.success) return;
+                const a = data.data.article;
+                const win = window.open('', '_blank');
+                win.document.write(`<html><head><title>${a.title}</title><link rel="stylesheet" href="/styles.css"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"></head><body class="bg-dark-900 text-white" style="font-family:Inter,sans-serif"><main style="max-width:800px;margin:0 auto;padding:40px 20px"><a href="/education" style="color:#a78bfa;text-decoration:none">← Back to Education</a><h1 style="font-size:2rem;margin:20px 0">${a.title}</h1><p style="color:#9ca3af;font-size:.9rem">By ${a.author} • ${new Date(a.createdAt).toLocaleDateString()}</p><div style="line-height:1.8;font-size:1rem">${a.content}</div></main></body></html>`);
+                win.document.close();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function loadQuizzes() {
+            const category = document.getElementById('quiz-category').value;
+            const params = new URLSearchParams();
+            if (category) params.set('category', category);
+            const container = document.getElementById('quizzes-list');
+            try {
+                const res = await fetch(`${API}/quizzes?${params.toString()}`);
+                const data = await res.json();
+                if (!data.count) {
+                    container.innerHTML = '<div class="text-center py-10 text-gray-500">No quizzes available.</div>';
+                    return;
+                }
+                container.innerHTML = data.data.map(q => `
+                    <article class="glass-card rounded-xl p-5 cursor-pointer hover:border-primary-500/30 transition-all" onclick="startQuiz('${q._id}')">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="inline-block px-2 py-1 rounded-full bg-primary-500/10 text-primary-300 text-xs font-semibold uppercase tracking-wide">${q.category.replace(/-/g, ' ')}</span>
+                            <span class="text-gray-600 text-xs">${q.questions ? q.questions.length : 0} questions</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-1">${q.title}</h3>
+                        ${q.description ? `<p class="text-gray-400 text-sm leading-relaxed">${q.description}</p>` : ''}
+                    </article>
+                `).join('');
+            } catch (err) {
+                container.innerHTML = '<div class="text-center py-10 text-gray-500">Failed to load quizzes.</div>';
+            }
+        }
+
+        async function startQuiz(id) {
+            try {
+                const res = await fetch(`${API}/quizzes/${id}`);
+                const data = await res.json();
+                if (!data.success) return;
+                currentQuiz = data.data.quiz;
+                currentIndex = 0;
+                quizAnswers = new Array(currentQuiz.questions.length).fill(-1);
+                document.getElementById('quiz-modal-title').textContent = currentQuiz.title;
+                document.getElementById('quiz-modal').classList.remove('hidden');
+                document.getElementById('quiz-modal').classList.add('flex');
+                renderQuestion();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function renderQuestion() {
+            const container = document.getElementById('quiz-question-container');
+            const q = currentQuiz.questions[currentIndex];
+            const saved = quizAnswers[currentIndex];
+            container.innerHTML = `
+                <p class="text-sm text-gray-400 mb-1">Question ${currentIndex + 1} of ${currentQuiz.questions.length}</p>
+                <h4 class="text-lg font-semibold text-white mb-4">${q.question}</h4>
+                <div class="space-y-3 mb-6">
+                    ${q.options.map((opt, i) => `
+                        <label class="flex items-center gap-3 p-3 rounded-lg bg-dark-900 border cursor-pointer hover:border-primary-500/40 transition-all ${saved === i ? 'border-primary-500/60' : 'border-white/10'}">
+                            <input type="radio" name="quiz-option" value="${i}" ${saved === i ? 'checked' : ''} class="accent-primary-500">
+                            <span class="text-gray-300 text-sm">${opt}</span>
+                        </label>
+                    `).join('')}
+                </div>
+                <div class="flex justify-between">
+                    <button onclick="prevQuestion()" class="px-5 py-2.5 rounded-lg border border-white/10 text-gray-300 text-sm hover:bg-white/5" ${currentIndex === 0 ? 'style="visibility:hidden"' : ''}>Previous</button>
+                    ${currentIndex === currentQuiz.questions.length - 1
+                        ? '<button onclick="submitAnswers()" class="cta-btn px-6 py-2.5 rounded-lg text-white text-sm font-semibold">Submit Answers</button>'
+                        : '<button onclick="nextQuestion()" class="cta-btn px-6 py-2.5 rounded-lg text-white text-sm font-semibold">Next</button>'}
+                </div>
+            `;
+        }
+
+        function saveCurrentAnswer() {
+            const radios = document.querySelectorAll('input[name="quiz-option"]:checked');
+            if (radios.length) {
+                quizAnswers[currentIndex] = parseInt(radios[0].value);
+            }
+        }
+
+        function nextQuestion() {
+            saveCurrentAnswer();
+            currentIndex++;
+            renderQuestion();
+        }
+
+        function prevQuestion() {
+            saveCurrentAnswer();
+            currentIndex--;
+            renderQuestion();
+        }
+
+        async function submitAnswers() {
+            saveCurrentAnswer();
+            if (quizAnswers.includes(-1)) {
+                const missing = quizAnswers.indexOf(-1);
+                currentIndex = missing;
+                renderQuestion();
+                alert(`Please answer question ${missing + 1}.`);
+                return;
+            }
+            try {
+                const res = await fetch(`${API}/quizzes/${currentQuiz._id}/submit`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ answers: quizAnswers })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showResult(data.data);
+                } else {
+                    alert(data.message || 'Failed to submit.');
+                }
+            } catch (err) {
+                alert('Network error.');
+            }
+        }
+
+        function showResult(d) {
+            const container = document.getElementById('quiz-question-container');
+            const color = d.percentage >= 70 ? 'text-primary-400' : d.percentage >= 50 ? 'text-accent-400' : 'text-red-400';
+            container.innerHTML = `
+                <div class="text-center py-6">
+                    <div class="text-5xl font-heading font-extrabold ${color} mb-2">${d.percentage}%</div>
+                    <p class="text-white text-lg mb-1">You scored ${d.score} out of ${d.total}</p>
+                    <p class="text-gray-400 text-sm mb-6">${d.percentage >= 70 ? 'Excellent! You have a strong grasp of this topic.' : d.percentage >= 50 ? 'Good job! Review the material to improve further.' : 'Keep learning — revisit the knowledge base and try again.'}</p>
+                </div>
+                <div class="max-h-64 overflow-y-auto space-y-3 mb-6">
+                    ${d.results.map(r => `
+                        <div class="p-3 rounded-lg ${r.isCorrect ? 'bg-primary-500/10 border border-primary-500/20' : 'bg-red-500/10 border border-red-500/20'}">
+                            <p class="text-sm font-semibold text-white mb-1">${r.question}</p>
+                            <p class="text-xs ${r.isCorrect ? 'text-primary-300' : 'text-red-300'}">${r.isCorrect ? '✓ Correct' : '✗ Incorrect'}</p>
+                            ${r.explanation ? `<p class="text-xs text-gray-400 mt-1">${r.explanation}</p>` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="text-center">
+                    <button onclick="closeQuiz()" class="cta-btn px-6 py-2.5 rounded-lg text-white text-sm font-semibold">Close</button>
+                </div>
+            `;
+        }
+
+        function closeQuiz() {
+            document.getElementById('quiz-modal').classList.add('hidden');
+            document.getElementById('quiz-modal').classList.remove('flex');
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setupAuthNav();
+            loadArticles();
+            loadQuizzes();
+
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    const isOpen = mobileMenu.classList.contains('open');
+                    if (isOpen) {
+                        mobileMenu.classList.remove('open');
+                        mobileMenu.classList.add('closed');
+                        mobileMenuBtn.classList.remove('active');
+                        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                    } else {
+                        mobileMenu.classList.remove('closed');
+                        mobileMenu.classList.add('open');
+                        mobileMenuBtn.classList.add('active');
+                        mobileMenuBtn.setAttribute('aria-expanded', 'true');
+                    }
+                });
+            }
+
+            document.getElementById('article-category').addEventListener('change', loadArticles);
+            document.getElementById('quiz-category').addEventListener('change', loadQuizzes);
+
+            const yearEl = document.getElementById('current-year');
+            if (yearEl) yearEl.textContent = new Date().getFullYear();
+        });
+    </script>
+</body>
+</html>
