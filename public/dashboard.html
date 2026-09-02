@@ -93,7 +93,10 @@
                 <div id="farmer-panel" class="hidden">
                     <div class="flex items-center justify-between mb-6">
                         <h2 class="font-heading text-2xl font-bold text-white">My Listings</h2>
-                        <a href="/marketplace#listing-form" class="text-sm font-semibold text-primary-400 hover:text-primary-300 transition-colors">+ Post a new listing</a>
+                        <div class="flex items-center gap-4">
+                            <a href="/marketplace" class="text-sm font-semibold text-gray-400 hover:text-primary-300 transition-colors">See all marketplace listings</a>
+                            <a href="/marketplace#listing-form" class="text-sm font-semibold text-primary-400 hover:text-primary-300 transition-colors">+ Post a new listing</a>
+                        </div>
                     </div>
                     <div id="my-listings" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div class="text-center py-10 text-gray-500 col-span-full">Loading your listings...</div>
@@ -218,11 +221,11 @@
 
             if (role === 'trader') {
                 trader.classList.remove('hidden');
-                cta.classList.remove('hidden');
                 hint.textContent = 'Browse produce and products from farmers, then reach out to buy.';
                 loadTraderListings();
             } else if (role === 'admin') {
                 admin.classList.remove('hidden');
+                cta.classList.remove('hidden');
                 hint.textContent = 'Full platform overview and management access.';
             } else {
                 farmer.classList.remove('hidden');

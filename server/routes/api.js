@@ -19,7 +19,7 @@ const {
     validateQuiz
 } = require('../middleware/validation');
 
-const { authenticate, optionalAuthenticate, authorize } = require('../middleware/auth');
+const { authenticate, authorize } = require('../middleware/auth');
 
 // ==============================
 // Contact Message Routes
@@ -43,7 +43,7 @@ router.get('/auth/profile', authenticate, authController.getProfile);
 // ==============================
 // Product / Marketplace Routes
 // ==============================
-router.post('/products', optionalAuthenticate, validateProduct, productController.createProduct);
+router.post('/products', authenticate, authorize('farmer', 'admin'), validateProduct, productController.createProduct);
 router.get('/products', productController.getProducts);
 router.get('/products/my', authenticate, productController.getMyProducts);
 router.get('/products/:id', productController.getProduct);

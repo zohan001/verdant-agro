@@ -175,7 +175,26 @@ const request = (path, options = {}) => {
         console.log(`[15] Profile with token ${res.status}: name=${res.body.data && res.body.data.user && res.body.data.user.name}`);
         console.assert(res.status === 200, 'Profile with token should be 200');
 
-        // 16. Create a product listing
+        // 15b. Register a farmer (farmers are the only ones who can post listings)
+        res = await request('/api/auth/register', {
+            method: 'POST',
+            body: { name: 'Test Farmer', email: `farmer_${Date.now()}@test.com`, password: 'secret123', role: 'farmer' }
+        });
+        console.log(`[15b] Register farmer ${res.status}: role=${res.body.data && res.body.data.user && res.body.data.user.role}`);
+        console.assert(res.status === 201, 'Register farmer should be 201');
+        const farmerToken = res.body.data.token;
+        const farmerId = res.body.data.user._id;
+
+        // 15c. 16. Create a product listing as a TRADER -> forbidden
+        res = await request('/api/products', {
+            method: 'POST',
+            body: { title: 'Trader Cannot Post', description: 'Traders buy, they do not sell.', category: 'produce', price: 1, unit: 'kg', location: 'Mombasa', contactEmail: 'trader@test.com' },
+            token: userToken
+        });
+        console.log(`[16] Create product as trader ${res.status}: expect 403`);
+        console.assert(res.status === 403, 'Trader creating a product should be 403');
+
+        // 16a. Create a product listing as a FARMER
         res = await request('/api/products', {
             method: 'POST',
             body: {
@@ -188,19 +207,19 @@ const request = (path, options = {}) => {
                 contactEmail: 'farmer@test.com',
                 contactPhone: '+254700000000'
             },
-            token: userToken
+            token: farmerToken
         });
-        console.log(`[16] Create product ${res.status}: ${res.body.message}`);
-        console.assert(res.status === 201, 'Create product should be 201');
+        console.log(`[16a] Create product as farmer ${res.status}: ${res.body.message}`);
+        console.assert(res.status === 201, 'Farmer creating a product should be 201');
         console.assert(res.body.data.product.seller, 'Product should record the seller');
         const productId = res.body.data.product._id;
 
-        // 16b. My products
-        res = await request('/api/products/my', { token: userToken });
+        // 16b. My products (farmer)
+        res = await request('/api/products/my', { token: farmerToken });
         console.log(`[16b] My products ${res.status}: count=${res.body.count}`);
         console.assert(res.status === 200, 'My products should be 200');
         console.assert(res.body.count === 1, 'My products should include the created listing');
-        console.assert(res.body.data[0].seller === userId, 'My products seller should match the token user');
+        console.assert(res.body.data[0].seller === farmerId, 'My products seller should match the token user');
 
         // 16c. Stats
         res = await request('/api/stats');
@@ -209,13 +228,22 @@ const request = (path, options = {}) => {
         console.assert(typeof res.body.data.farmers === 'number', 'Stats farmers should be a number');
         console.assert(res.body.data.listings >= 1, 'Stats listings should include created listing');
 
-        // 17. Create product missing required fields
+        // 17. Create product missing required fields (with a farmer token)
         res = await request('/api/products', {
             method: 'POST',
+            token: farmerToken,
             body: { title: 'Incomplete' }
         });
         console.log(`[17] Create product invalid ${res.status}: expect 400`);
         console.assert(res.status === 400, 'Invalid product should be 400');
+
+        // 17b. Create product without any token -> 401
+        res = await request('/api/products', {
+            method: 'POST',
+            body: { title: 'No Auth Product', description: 'x'.repeat(20), category: 'produce', price: 5, unit: 'kg', location: 'X', contactEmail: 'x@x.com' }
+        });
+        console.log(`[17b] Create product no token ${res.status}: expect 401`);
+        console.assert(res.status === 401, 'Create product without token should be 401');
 
         // 18. Get products
         res = await request('/api/products');
@@ -228,17 +256,17 @@ const request = (path, options = {}) => {
         console.log(`[19] Get product ${res.status}: ${res.body.data && res.body.data.product && res.body.data.product.title}`);
         console.assert(res.status === 200, 'Get product should be 200');
 
-        // 20. Update product without auth (should allow since created without seller? expect 200 from controller)
+        // 20. Update product (owner farmer)
         res = await request(`/api/products/${productId}`, {
             method: 'PUT',
-            token: userToken,
+            token: farmerToken,
             body: { price: 18 }
         });
         console.log(`[20] Update product ${res.status}: ${res.body.message}`);
         console.assert(res.status === 200, 'Update product should be 200');
 
         // 21. Delete product
-        res = await request(`/api/products/${productId}`, { method: 'DELETE', token: userToken });
+        res = await request(`/api/products/${productId}`, { method: 'DELETE', token: farmerToken });
         console.log(`[21] Delete product ${res.status}: ${res.body.message}`);
         console.assert(res.status === 200, 'Delete product should be 200');
 
