@@ -36,8 +36,32 @@ function createApp() {
     // Apply Security Middleware
     // ==============================
 
-    // Use helmet for security headers
-    app.use(helmet());
+    // Use helmet for security headers.
+    //
+    // IMPORTANT: the app intentionally runs plain inline <script> blocks and
+    // inline onclick="" handlers (no bundler), and loads Google Fonts. Helmet's
+    // DEFAULT CSP (`script-src 'self'`) blocks ALL of that, so every page's
+    // JavaScript silently never ran in the browser (login redirects, article
+    // loading, stats, etc. all appeared frozen). The directives below keep the
+    // protections we want while explicitly allowing the inline scripts/styles
+    // this frontend depends on.
+    app.use(helmet({
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'"],
+                scriptSrc: ["'self'", "'unsafe-inline'"],
+                scriptSrcAttr: ["'unsafe-inline'"],
+                styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+                fontSrc: ["'self'", 'https://fonts.gstatic.com', 'data:'],
+                imgSrc: ["'self'", 'data:'],
+                connectSrc: ["'self'"],
+                objectSrc: ["'none'"],
+                frameAncestors: ["'self'"],
+                baseUri: ["'self'"],
+                formAction: ["'self'"]
+            }
+        }
+    }));
 
     // Enable CORS for cross-origin requests
     app.use(cors({
