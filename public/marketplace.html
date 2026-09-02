@@ -194,11 +194,34 @@
 
     <script>
         const API = '/api';
-        const getToken = () => localStorage.getItem('token');
+        function readStored(name) {
+            try {
+                const v = localStorage.getItem(name);
+                if (v !== null && v !== undefined) return v;
+            } catch (e) { /* storage unavailable */ }
+            const m = document.cookie.match('(?:^|; )' + name + '=([^;]*)');
+            return m ? decodeURIComponent(m[1]) : null;
+        }
+        const getToken = () => readStored('kcnp_token') || readStored('token');
+        const getAuthUser = () => {
+            try {
+                return JSON.parse(readStored('kcnp_user') || readStored('user') || 'null');
+            } catch (e) { return null; }
+        };
+        function clearSession() {
+            try {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+            } catch (e) {}
+            document.cookie = 'kcnp_token=; path=/; max-age=0';
+            document.cookie = 'kcnp_user=; path=/; max-age=0';
+            document.cookie = 'token=; path=/; max-age=0';
+            document.cookie = 'user=; path=/; max-age=0';
+        }
 
         function setupAuthNav() {
             const token = getToken();
-            const auth = JSON.parse(localStorage.getItem('user') || 'null');
+            const auth = getAuthUser();
             const desktop = document.getElementById('nav-auth-desktop');
             const mobile = document.getElementById('nav-auth-mobile');
             if (desktop) {
@@ -311,8 +334,7 @@
         }
 
         function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
+            clearSession();
             window.location.href = '/';
         }
 

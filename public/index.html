@@ -834,8 +834,31 @@
             // 0. Auth-Aware Navigation
             // ==============================
             const setupAuthNav = () => {
-                const token = localStorage.getItem('token');
-                const user = JSON.parse(localStorage.getItem('user') || 'null');
+                const readStored = (name) => {
+                    try {
+                        const v = localStorage.getItem(name);
+                        if (v !== null && v !== undefined) return v;
+                    } catch (e) { /* storage unavailable */ }
+                    const m = document.cookie.match('(?:^|; )' + name + '=([^;]*)');
+                    return m ? decodeURIComponent(m[1]) : null;
+                };
+                const getAuthToken = () => readStored('kcnp_token') || readStored('token');
+                const getAuthUser = () => {
+                    try {
+                        return JSON.parse(readStored('kcnp_user') || readStored('user') || 'null');
+                    } catch (e) { return null; }
+                };
+                const clearSession = () => {
+                    try {
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                    } catch (e) {}
+                    ['kcnp_token', 'kcnp_user', 'token', 'user'].forEach(name => {
+                        document.cookie = name + '=; path=/; max-age=0';
+                    });
+                };
+                const token = getAuthToken();
+                const user = getAuthUser();
                 const desktopLink = document.getElementById('navbar-auth-link');
                 const desktopText = document.getElementById('navbar-auth-text');
                 const mobileLink = document.getElementById('mobile-auth-link');
@@ -858,8 +881,7 @@
                 logoutLinks.forEach(link => {
                     link.addEventListener('click', (e) => {
                         e.preventDefault();
-                        localStorage.removeItem('token');
-                        localStorage.removeItem('user');
+                        clearSession();
                         window.location.href = '/';
                     });
                 });
