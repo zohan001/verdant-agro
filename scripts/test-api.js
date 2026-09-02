@@ -187,11 +187,27 @@ const request = (path, options = {}) => {
                 location: 'Mombasa, Kenya',
                 contactEmail: 'farmer@test.com',
                 contactPhone: '+254700000000'
-            }
+            },
+            token: userToken
         });
         console.log(`[16] Create product ${res.status}: ${res.body.message}`);
         console.assert(res.status === 201, 'Create product should be 201');
+        console.assert(res.body.data.product.seller, 'Product should record the seller');
         const productId = res.body.data.product._id;
+
+        // 16b. My products
+        res = await request('/api/products/my', { token: userToken });
+        console.log(`[16b] My products ${res.status}: count=${res.body.count}`);
+        console.assert(res.status === 200, 'My products should be 200');
+        console.assert(res.body.count === 1, 'My products should include the created listing');
+        console.assert(res.body.data[0].seller === userId, 'My products seller should match the token user');
+
+        // 16c. Stats
+        res = await request('/api/stats');
+        console.log(`[16c] Stats ${res.status}: farmers=${res.body.data.farmers} traders=${res.body.data.traders} listings=${res.body.data.listings} articles=${res.body.data.articles}`);
+        console.assert(res.status === 200, 'Stats should be 200');
+        console.assert(typeof res.body.data.farmers === 'number', 'Stats farmers should be a number');
+        console.assert(res.body.data.listings >= 1, 'Stats listings should include created listing');
 
         // 17. Create product missing required fields
         res = await request('/api/products', {
@@ -321,7 +337,7 @@ const request = (path, options = {}) => {
         console.assert(res.body.data.score === 1, 'Score should be 1');
 
         // 30. New page URLs serve correctly
-        for (const page of ['/marketplace', '/education', '/login', '/register']) {
+        for (const page of ['/marketplace', '/education', '/login', '/register', '/dashboard']) {
             res = await request(page);
             console.log(`[30] Page ${page} ${res.status}`);
             console.assert(res.status === 200, `${page} should be 200`);

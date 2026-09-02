@@ -7,6 +7,7 @@ const authController = require('../controllers/authController');
 const productController = require('../controllers/productController');
 const articleController = require('../controllers/articleController');
 const quizController = require('../controllers/quizController');
+const statsController = require('../controllers/statsController');
 
 const {
     validateContactMessage,
@@ -18,7 +19,7 @@ const {
     validateQuiz
 } = require('../middleware/validation');
 
-const { authenticate, authorize } = require('../middleware/auth');
+const { authenticate, optionalAuthenticate, authorize } = require('../middleware/auth');
 
 // ==============================
 // Contact Message Routes
@@ -42,8 +43,9 @@ router.get('/auth/profile', authenticate, authController.getProfile);
 // ==============================
 // Product / Marketplace Routes
 // ==============================
-router.post('/products', validateProduct, productController.createProduct);
+router.post('/products', optionalAuthenticate, validateProduct, productController.createProduct);
 router.get('/products', productController.getProducts);
+router.get('/products/my', authenticate, productController.getMyProducts);
 router.get('/products/:id', productController.getProduct);
 router.put('/products/:id', authenticate, productController.updateProduct);
 router.delete('/products/:id', authenticate, productController.deleteProduct);
@@ -66,6 +68,11 @@ router.get('/quizzes/:id', quizController.getQuiz);
 router.post('/quizzes/:id/submit', quizController.submitQuiz);
 router.put('/quizzes/:id', authenticate, authorize('admin'), quizController.updateQuiz);
 router.delete('/quizzes/:id', authenticate, authorize('admin'), quizController.deleteQuiz);
+
+// ==============================
+// Stats
+// ==============================
+router.get('/stats', statsController.getStats);
 
 // ==============================
 // Health Check

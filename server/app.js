@@ -84,17 +84,24 @@ function createApp() {
     });
 
     // App pages (clean URLs for the SPA sections)
-    app.get(['/marketplace', '/marketplace/'], (req, res) => {
-        res.sendFile(path.join(__dirname, '..', 'public', 'marketplace.html'));
-    });
-    app.get(['/education', '/education/'], (req, res) => {
-        res.sendFile(path.join(__dirname, '..', 'public', 'education.html'));
-    });
-    app.get(['/login', '/login/'], (req, res) => {
-        res.sendFile(path.join(__dirname, '..', 'public', 'login.html'));
-    });
-    app.get(['/register', '/register/'], (req, res) => {
-        res.sendFile(path.join(__dirname, '..', 'public', 'register.html'));
+    const pageRoutes = [
+        ['/marketplace', 'marketplace.html'],
+        ['/education', 'education.html'],
+        ['/login', 'login.html'],
+        ['/register', 'register.html'],
+        ['/dashboard', 'dashboard.html']
+    ];
+    pageRoutes.forEach(([pathName, file]) => {
+        app.get([pathName, `${pathName}/`], (req, res) => {
+            // Never cache HTML pages: the frontend changes often and stale
+            // "Loading..." states confuse users after an update.
+            res.set({
+                'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0'
+            });
+            res.sendFile(path.join(__dirname, '..', 'public', file));
+        });
     });
 
     // ==============================

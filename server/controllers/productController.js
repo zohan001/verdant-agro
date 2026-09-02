@@ -59,6 +59,23 @@ async function getProducts(req, res) {
     }
 }
 
+async function getMyProducts(req, res) {
+    try {
+        const products = await Product.find({ seller: req.user._id }).sort({ createdAt: -1 });
+        return res.status(200).json({
+            success: true,
+            count: products.length,
+            data: products
+        });
+    } catch (err) {
+        console.error('[Product] Fetch mine failed:', err.message);
+        return res.status(500).json({
+            success: false,
+            message: 'Failed to fetch your listings.'
+        });
+    }
+}
+
 async function getProduct(req, res) {
     try {
         const product = await Product.findById(req.params.id);
@@ -149,4 +166,4 @@ async function deleteProduct(req, res) {
     }
 }
 
-module.exports = { createProduct, getProducts, getProduct, updateProduct, deleteProduct };
+module.exports = { createProduct, getProducts, getMyProducts, getProduct, updateProduct, deleteProduct };

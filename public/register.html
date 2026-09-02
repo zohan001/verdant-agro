@@ -169,7 +169,7 @@
                     formError.className = 'mt-4 p-4 rounded-xl bg-primary-500/10 border border-primary-500/20 text-primary-300 text-sm text-center';
                     formError.textContent = 'Account created! Redirecting...';
                     formError.classList.remove('hidden');
-                    setTimeout(() => { window.location.href = '/marketplace'; }, 1200);
+                    setTimeout(() => { window.location.href = '/dashboard'; }, 1200);
                 } else {
                     formError.className = 'mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-300 text-sm text-center';
                     formError.textContent = data.message || 'Registration failed. Please try again.';

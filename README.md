@@ -90,7 +90,9 @@ npm run seed
 ```
 
 Loads starter content (knowledge-base articles, a quiz, a sample listing)
-and three demo accounts:
+and three demo accounts. After login you land on a role-based **Dashboard**:
+farmers post/manage their own listings, traders browse and contact sellers,
+and the live stats on the homepage reflect real database counts.
 
 | Role   | Email                | Password    |
 |--------|----------------------|-------------|

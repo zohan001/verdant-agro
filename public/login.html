@@ -126,11 +126,15 @@
             submitSpinner.classList.remove('hidden');
 
             try {
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 10000);
                 const res = await fetch('/api/auth/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: email.value, password: password.value })
+                    body: JSON.stringify({ email: email.value, password: password.value }),
+                    signal: controller.signal
                 });
+                clearTimeout(timeout);
                 const data = await res.json();
                 submitText.textContent = 'Login';
                 submitSpinner.classList.add('hidden');
@@ -138,7 +142,10 @@
                 if (res.ok && data.success) {
                     localStorage.setItem('token', data.data.token);
                     localStorage.setItem('user', JSON.stringify(data.data.user));
-                    window.location.href = '/marketplace';
+                    formError.className = 'hidden mt-4 p-4 rounded-xl bg-primary-500/10 border border-primary-500/20 text-primary-300 text-sm text-center';
+                    formError.textContent = 'Login successful! Redirecting to your dashboard...';
+                    formError.classList.remove('hidden');
+                    setTimeout(() => { window.location.href = '/dashboard'; }, 800);
                 } else {
                     formError.textContent = data.message || 'Login failed. Please try again.';
                     formError.classList.remove('hidden');
@@ -146,7 +153,7 @@
             } catch (err) {
                 submitText.textContent = 'Login';
                 submitSpinner.classList.add('hidden');
-                formError.textContent = 'Network error. Please try again.';
+                formError.textContent = err.name === 'AbortError' ? 'Login timed out. Please try again.' : 'Network error. Please try again.';
                 formError.classList.remove('hidden');
             }
         });

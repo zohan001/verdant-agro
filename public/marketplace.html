@@ -203,14 +203,16 @@
             const mobile = document.getElementById('nav-auth-mobile');
             if (desktop) {
                 if (token && auth) {
-                    desktop.innerHTML = `<a href="#" onclick="logout()" class="text-sm font-medium text-gray-300 hover:text-primary-400 transition-colors">Logout (${auth.name.split(' ')[0]})</a>`;
+                    desktop.innerHTML = `<a href="/dashboard" class="text-sm font-medium text-primary-400 hover:text-primary-300 transition-colors">Dashboard</a>
+                        <a href="#" onclick="logout()" class="text-sm font-medium text-gray-300 hover:text-primary-400 transition-colors">Logout (${auth.name.split(' ')[0]})</a>`;
                 } else {
                     desktop.innerHTML = `<a href="/login" class="text-sm font-medium text-gray-300 hover:text-primary-400 transition-colors">Login</a>`;
                 }
             }
             if (mobile) {
                 if (token && auth) {
-                    mobile.innerHTML = `<a href="#" onclick="logout()" class="block px-4 py-3 rounded-lg text-gray-300 hover:text-primary-400 hover:bg-white/5 transition-all duration-300">Logout (${auth.name.split(' ')[0]})</a>`;
+                    mobile.innerHTML = `<a href="/dashboard" class="block px-4 py-3 rounded-lg text-primary-400 hover:bg-white/5 transition-all duration-300">Dashboard</a>
+                        <a href="#" onclick="logout()" class="block px-4 py-3 rounded-lg text-gray-300 hover:text-primary-400 hover:bg-white/5 transition-all duration-300">Logout (${auth.name.split(' ')[0]})</a>`;
                 } else {
                     mobile.innerHTML = `<a href="/login" class="block px-4 py-3 rounded-lg text-primary-400 hover:bg-white/5 transition-all duration-300">Login / Register</a>`;
                 }

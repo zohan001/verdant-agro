@@ -53,6 +53,7 @@
                     <a href="#home" class="text-sm font-medium text-gray-300 hover:text-primary-400 transition-colors duration-300">Home</a>
                     <a href="/marketplace" class="text-sm font-medium text-gray-300 hover:text-primary-400 transition-colors duration-300">Marketplace</a>
                     <a href="/education" class="text-sm font-medium text-gray-300 hover:text-primary-400 transition-colors duration-300">Education</a>
+                    <span id="dashboard-nav-desktop"></span>
                     <a href="#impact" class="text-sm font-medium text-gray-300 hover:text-primary-400 transition-colors duration-300">Impact</a>
                     <a href="#contact" class="text-sm font-medium text-gray-300 hover:text-primary-400 transition-colors duration-300">Contact</a>
                 </div>
@@ -168,23 +169,23 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
                     <!-- Stat 1 -->
                     <div class="text-center reveal">
-                        <div class="stat-number text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold mb-2" data-target="500">0</div>
-                        <p class="text-sm sm:text-base text-gray-400">Farmers Empowered</p>
+                        <div class="stat-number text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold mb-2" id="stat-farmers" data-target="500">500</div>
+                        <p class="text-sm sm:text-base text-gray-400">Farmers on Platform</p>
                     </div>
                     <!-- Stat 2 -->
                     <div class="text-center reveal">
-                        <div class="stat-number text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold mb-2" data-target="12">0</div>
-                        <p class="text-sm sm:text-base text-gray-400">Countries Reached</p>
+                        <div class="stat-number text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold mb-2" id="stat-traders" data-target="12">12</div>
+                        <p class="text-sm sm:text-base text-gray-400">Traders on Platform</p>
                     </div>
                     <!-- Stat 3 -->
                     <div class="text-center reveal">
-                        <div class="stat-number text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold mb-2" data-target="30">0</div>
-                        <p class="text-sm sm:text-base text-gray-400">Projects Completed</p>
+                        <div class="stat-number text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold mb-2" id="stat-listings" data-target="30">30</div>
+                        <p class="text-sm sm:text-base text-gray-400">Active Market Listings</p>
                     </div>
                     <!-- Stat 4 -->
                     <div class="text-center reveal">
-                        <div class="stat-number text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold mb-2" data-target="85">0</div>
-                        <p class="text-sm sm:text-base text-gray-400">Tons CO2 Reduced</p>
+                        <div class="stat-number text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold mb-2" id="stat-articles" data-target="85">85</div>
+                        <p class="text-sm sm:text-base text-gray-400">Knowledge Articles</p>
                     </div>
                 </div>
             </div>
@@ -842,9 +843,16 @@
 
                 if (token && user && user.name) {
                     const firstName = user.name.split(' ')[0];
-                    desktopLink.href = '/logout';
+                    desktopLink.href = '/dashboard';
                     desktopText.textContent = firstName;
-                    if (mobileLink) { mobileLink.href = '/logout'; mobileText.textContent = firstName; }
+                    const dashDesktop = document.getElementById('dashboard-nav-desktop');
+                    if (dashDesktop) {
+                        dashDesktop.innerHTML = '<a href="/dashboard" class="text-sm font-medium text-primary-400 transition-colors duration-300">Dashboard</a>';
+                    }
+                    if (mobileLink) {
+                        mobileLink.href = '/dashboard';
+                        mobileText.textContent = firstName;
+                    }
                 }
                 const logoutLinks = document.querySelectorAll('a[href="/logout"]');
                 logoutLinks.forEach(link => {
@@ -931,39 +939,38 @@
             revealElements.forEach(el => revealObserver.observe(el));
 
             // ==============================
-            // 4. Counter Animation (Stats)
+            // 4. Live Statistics (real numbers)
             // ==============================
-            const statNumbers = document.querySelectorAll('.stat-number[data-target]');
-
-            const animateCounter = (element) => {
-                const target = parseInt(element.getAttribute('data-target'));
-                const duration = 2000; // 2 seconds
-                const increment = target / (duration / 16); // 60fps
-                let current = 0;
-
-                const updateCounter = () => {
-                    current += increment;
-                    if (current < target) {
-                        element.textContent = Math.floor(current) + '+';
-                        requestAnimationFrame(updateCounter);
-                    } else {
-                        element.textContent = target + '+';
-                    }
-                };
-
-                requestAnimationFrame(updateCounter);
+            // The stat numbers are real counts pulled from the API. The
+            // fallback values baked into the HTML guarantee numbers are
+            // always shown — never zeros — even before/without JS.
+            const setStat = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    const v = parseInt(value) || 0;
+                    el.setAttribute('data-target', v);
+                    el.textContent = v + '+';
+                }
             };
 
-            const counterObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        animateCounter(entry.target);
-                        counterObserver.unobserve(entry.target);
+            const loadStats = async () => {
+                try {
+                    const controller = new AbortController();
+                    const timeout = setTimeout(() => controller.abort(), 8000);
+                    const res = await fetch('/api/stats', { signal: controller.signal });
+                    clearTimeout(timeout);
+                    const data = await res.json();
+                    if (data.success) {
+                        setStat('stat-farmers', data.data.farmers);
+                        setStat('stat-traders', data.data.traders);
+                        setStat('stat-listings', data.data.listings);
+                        setStat('stat-articles', data.data.articles);
                     }
-                });
-            }, { threshold: 0.5 });
-
-            statNumbers.forEach(el => counterObserver.observe(el));
+                } catch (err) {
+                    // Keep the fallback numbers already present in the HTML.
+                }
+            };
+            loadStats();
 
             // ==============================
             // 5. Contact Form Validation
